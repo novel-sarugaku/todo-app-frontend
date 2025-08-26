@@ -7,11 +7,11 @@ interface MainRootPresentationalProps {
 export const MainRootPresentational = ({ items }: MainRootPresentationalProps) => {
   return (
     <>
-      <h1>useQeryが機能しているか確認中</h1>
-      {items.map((flow) => (
-        <li key={flow.id}>
-          {flow.title}
-          {flow.amount}円 ({flow.occurred_date})
+      <h1>useQeryが機能しているか確認中¥</h1>
+      {items.map((item) => (
+        <li key={item.id}>
+          {item.title}
+          {item.amount}円 ({item.occurred_date})
         </li>
       ))}
     </>
