@@ -15,10 +15,7 @@ interface CustomRenderProviderProps {
 export const CustomRenderProvider = ({ children }: CustomRenderProviderProps) => {
   return (
     <QueryClientProvider client={createTestQueryClient()}>
-      {' '}
-      {/* React Query を使えるようにする */}
-      <MemoryRouter>{children}</MemoryRouter>{' '}
-      {/* 仮想的なルーティング（画面遷移機能）を使えるようにする */}
+      <MemoryRouter>{children}</MemoryRouter>
     </QueryClientProvider>
   )
 }
