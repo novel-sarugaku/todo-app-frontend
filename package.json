@@ -11,7 +11,7 @@
     "format": "prettier --check --ignore-path .gitignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
     "preview": "vite preview",
-    "test": "vitest --passWithNoTests"
+    "test": "vitest"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.85.5",
