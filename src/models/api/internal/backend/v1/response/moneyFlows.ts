@@ -1,8 +1,8 @@
 type MoneyFlowItem = {
-    id: number
-    title: string
-    amount: number
-    occurred_date: string
+  id: number
+  title: string
+  amount: number
+  occurred_date: string
 }
 
 // GETレスポンス（１件）
