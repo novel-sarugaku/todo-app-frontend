@@ -1,4 +1,4 @@
-name: Code Style Check With ESLint and Prettier # ワークフローの表示名
+name: Code checking with ESLint, Prettier, and Vitest # ワークフローの表示名
 
 on:
   pull_request: # PRが作られた時に動かす
