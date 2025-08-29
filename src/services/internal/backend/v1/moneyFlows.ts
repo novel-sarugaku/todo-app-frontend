@@ -2,7 +2,7 @@ import { internalBackendV1Client } from './client'
 import {
   type DeleteMoneyFlowRequest,
   type CreateMoneyFlowRequest,
-  type UpdateMoneyFlowRequest
+  type UpdateMoneyFlowRequest,
 } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import {
   type GetMoneyFlowResponseItem,
@@ -29,15 +29,21 @@ export const getMoneyFlows = async (): Promise<GetMoneyFlowsResponse> => {
 export const createMoneyFlow = async (
   request: CreateMoneyFlowRequest,
 ): Promise<CreateMoneyFlowResponse> => {
-  const response = await internalBackendV1Client.post<CreateMoneyFlowResponse>('/money_flows', request)
+  const response = await internalBackendV1Client.post<CreateMoneyFlowResponse>(
+    '/money_flows',
+    request,
+  )
   return response.data
 }
 
 // 更新
 export const updateMoneyFlow = async (
-  request: UpdateMoneyFlowRequest
+  request: UpdateMoneyFlowRequest,
 ): Promise<UpdateMoneyFlowResponse> => {
-  const response = await internalBackendV1Client.put<UpdateMoneyFlowResponse>('/money_flows', request)
+  const response = await internalBackendV1Client.put<UpdateMoneyFlowResponse>(
+    '/money_flows',
+    request,
+  )
   return response.data
 }
 

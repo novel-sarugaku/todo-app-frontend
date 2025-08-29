@@ -1,9 +1,7 @@
 import './App.css'
 import { AppRouter } from 'src/routes/home'
 
-
 function App() {
-
   return (
     <>
       <AppRouter />
