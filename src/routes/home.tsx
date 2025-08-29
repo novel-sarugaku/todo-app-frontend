@@ -5,11 +5,11 @@ import { UserBaseRouter } from 'src/routes/user/base'
 
 // export：外部から参照できるようにするためのもの
 export const AppRouter = () => {
-    return (
-        <>
-            <Routes>
-                <Route path='/user' element={<UserBaseRouter />} />
-            </Routes>
-        </>
-    )
+  return (
+    <>
+      <Routes>
+        <Route path='/user' element={<UserBaseRouter />} />
+      </Routes>
+    </>
+  )
 }
