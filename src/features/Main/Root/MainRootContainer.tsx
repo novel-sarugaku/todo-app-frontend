@@ -1,7 +1,8 @@
 // import { useEffect } from 'react'
 // import { getMoneyFlow, getMoneyFlows, createMoneyFlow, updateMoneyFlow, deleteMoneyFlows } from '@/services/internal/backend/v1/moneyFlows'
+import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentational'
 
-export const UserRootContainer = () => {
+export const MainRootContainer = () => {
   /*
 //   API疎通確認用
     useEffect(() => {
@@ -53,5 +54,5 @@ export const UserRootContainer = () => {
     })
     }, [])
 */
-  return <h1>家計フロー確認ページ</h1>
+  return <MainRootPresentational />
 }
