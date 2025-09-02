@@ -1,7 +1,15 @@
+/* 画面全体を使えるよう設定 */
+html,
+body,
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  max-width: none; /* 横幅制限をなくす */
+  margin: 0; /* ブラウザのデフォルト余白を消す */
+  padding: 0; /* 内側の余白を消す */
   text-align: center;
 }
 
