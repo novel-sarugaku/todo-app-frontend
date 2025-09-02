@@ -1,3 +1,5 @@
+// Chakra UIのProvider
+import { Provider as ChakraUIProvider } from '@/components/ui/provider.tsx'
 // React Queryのデータ管理を使えるようにするもの
 import { QueryClientProvider } from '@tanstack/react-query'
 // React Routerのテスト用のルーター
@@ -14,8 +16,10 @@ interface CustomRenderProviderProps {
 // テスト時にReactコンポーネントを実際の環境と同じように動かせるようにするもの
 export const CustomRenderProvider = ({ children }: CustomRenderProviderProps) => {
   return (
-    <QueryClientProvider client={createTestQueryClient()}>
-      <MemoryRouter>{children}</MemoryRouter>
-    </QueryClientProvider>
+    <ChakraUIProvider>
+      <QueryClientProvider client={createTestQueryClient()}>
+        <MemoryRouter>{children}</MemoryRouter>
+      </QueryClientProvider>
+    </ChakraUIProvider>
   )
 }
