@@ -9,6 +9,7 @@ import {
   type GetMoneyFlowsResponse,
   type CreateMoneyFlowResponse,
   type UpdateMoneyFlowResponse,
+  type Kind,
 } from '@/models/api/internal/backend/v1/response/moneyFlows'
 
 // 1件取得
@@ -20,8 +21,10 @@ export const getMoneyFlow = async (id: number): Promise<GetMoneyFlowResponseItem
 }
 
 // 全件取得
-export const getMoneyFlows = async (): Promise<GetMoneyFlowsResponse> => {
-  const response = await internalBackendV1Client.get<GetMoneyFlowsResponse>('/money_flows')
+export const getMoneyFlows = async (kind?: Kind): Promise<GetMoneyFlowsResponse> => {
+  const response = await internalBackendV1Client.get<GetMoneyFlowsResponse>('/money_flows', {
+    params: kind ? { kind } : undefined,
+  })
   return response.data
 }
 

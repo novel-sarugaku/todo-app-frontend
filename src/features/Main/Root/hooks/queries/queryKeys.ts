@@ -1,7 +1,4 @@
 export const moneyFlowsQueryKeys = {
-  // 一覧データを区別するためのキー
-  all: ['moneyFlows'] as const,
-
-  // 詳細データを区別するためのキー
-  details: (id: number) => [...moneyFlowsQueryKeys.all, id] as const,
+  all: ['moneyFlows'] as const, // 全件取得用
+  details: (id: number) => ['moneyFlows', id] as const, // 特定IDの詳細取得用
 }
