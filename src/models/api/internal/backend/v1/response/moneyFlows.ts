@@ -1,8 +1,11 @@
+export type Kind = 'income' | 'expense'
+
 type MoneyFlowItem = {
   id: number
   title: string
   amount: number
   occurred_date: string
+  kind: Kind
 }
 
 // GETレスポンス（１件）
