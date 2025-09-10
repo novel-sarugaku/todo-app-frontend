@@ -1,4 +1,4 @@
-// 表示月の管理用
+// 最新月の表示・移動管理用
 
 import { useState } from 'react'
 
@@ -16,8 +16,14 @@ export const useMonthNavigationHandler = (items: moneyFlowData[]) => {
 
   // 翌月に移動
   const goNextMonth = () => {
-    setCurrentMonth(addMonth(currentMonth, +1))
+    setCurrentMonth(addMonth(currentMonth, 1))
   }
 
-  return { currentMonth, goPrevMonth, goNextMonth }
+  // 任意の年月に移動
+  // new Date：1日を指定、toMonthStart()：どんな日付でもその月の1日にそろえる
+  const goToMonth = (year: number, monthIndex0to11: number) => {
+    setCurrentMonth(new Date(year, monthIndex0to11, 1))
+  }
+
+  return { currentMonth, goPrevMonth, goNextMonth, goToMonth }
 }

@@ -6,6 +6,7 @@ import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentatio
 import * as IncomeTableCard from '@/features/Main/Root/ui/IncomeTableCard/IncomeTableCard'
 import * as ExpensesTableCard from '@/features/Main/Root/ui/ExpensesTableCard/ExpensesTableCard'
 import * as BalanceTotalCard from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
+import * as MonthPicker from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
 import type { moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 const mockData: moneyFlowData[] = [
@@ -24,70 +25,80 @@ const mockData: moneyFlowData[] = [
     kind: 'expense',
   },
 ]
-const mockCurrentMonth = new Date(2025, 8, 1)
-const mockGoPrev = vi.fn()
-const mockGoNext = vi.fn()
+const mockYearAndMonthLabel = '2025年9月'
+const mockGoToMonth = vi.fn()
+const mockCurrentMonth = new Date(2025, 8, 5)
+const mockViewYear = 2025
+const mockOnViewPrevYear = vi.fn()
+const mockOnViewNextYear = vi.fn()
 const defaultProps = {
-  items: mockData,
-  currentMonth: mockCurrentMonth,
-  onPrevMonth: mockGoPrev,
-  onNextMonth: mockGoNext,
+  monthlyItems: mockData,
+  yearAndMonthLabel: mockYearAndMonthLabel,
+  onChangeMonth: mockGoToMonth,
+  currentYear: mockCurrentMonth.getFullYear(),
+  currentMonth: mockCurrentMonth.getMonth(),
+  viewYear: mockViewYear,
+  onViewPrevYear: mockOnViewPrevYear,
+  onViewNextYear: mockOnViewNextYear,
 }
 const noDataInformation =
   /選択した年月は収入・支出ともに登録がありません。\s画面右上に表示されている「収支を登録する」ボタンから登録してください。\s登録後こちらに一覧が表示されます。/
 
+// Mocking the IncomeTableCard component
+vi.spyOn(IncomeTableCard, 'IncomeTableCard').mockImplementation(() => {
+  return <div data-testid='mock-incomeTableCard'>Mocked IncomeTableCard</div>
+})
+
+// Mocking the ExpensesTableCard component
+vi.spyOn(ExpensesTableCard, 'ExpensesTableCard').mockImplementation(() => {
+  return <div data-testid='mock-expensesTableCard'>Mocked ExpensesTableCard</div>
+})
+
+// Mocking the BalanceTotalCard component
+vi.spyOn(BalanceTotalCard, 'BalanceTotalCard').mockImplementation(() => {
+  return <div data-testid='mock-balanceTotalCard'>Mocked BalanceTotalCard</div>
+})
+
+// Mocking the MonthPickerCard component
+vi.spyOn(MonthPicker, 'MonthPickerCard').mockImplementation(() => {
+  return <div data-testid='mock-monthPickerCard'>Mocked MonthPickerCard</div>
+})
+
 describe('MainRootPresentational', () => {
   describe('正常系', () => {
-    it('データが登録されていない月を表示した場合、データがない場合の案内と「< —年—月 >」が表示される', () => {
+    it('データが登録されていない月を表示した場合、データがない場合の案内とが表示される', () => {
       const noDataProps = {
         ...defaultProps,
-        items: [],
+        monthlyItems: [],
       }
 
       customRender(<MainRootPresentational {...noDataProps} />)
 
       expect(screen.getByText(noDataInformation)).toBeInTheDocument()
-      expect(screen.getByText('—年—月')).toBeInTheDocument()
-      expect(screen.getByTestId('prev-icon')).toBeInTheDocument()
-      expect(screen.getByTestId('next-icon')).toBeInTheDocument()
-    })
-
-    it('データが登録されている月を表示した場合、「< 2025年9月 >」が表示される', () => {
-      customRender(<MainRootPresentational {...defaultProps} />)
-
-      expect(screen.getByText('2025年9月')).toBeInTheDocument()
-      expect(screen.getByTestId('prev-icon')).toBeInTheDocument()
-      expect(screen.getByTestId('next-icon')).toBeInTheDocument()
     })
 
     it('収入データが登録されている場合、適切なpropsでIncomeTableCardコンポーネントが表示される', () => {
-      vi.spyOn(IncomeTableCard, 'IncomeTableCard').mockImplementation(() => {
-        return <div data-testid='mock-incomeTableCard'>Mocked IncomeTableCard</div>
-      })
-
       customRender(<MainRootPresentational {...defaultProps} />)
 
       expect(screen.getByTestId('mock-incomeTableCard')).toBeInTheDocument()
     })
 
     it('支出データが登録されている場合、適切なpropsでExpensesTableCardコンポーネントが表示される', () => {
-      vi.spyOn(ExpensesTableCard, 'ExpensesTableCard').mockImplementation(() => {
-        return <div data-testid='mock-expensesTableCard'>Mocked ExpensesTableCard</div>
-      })
-
       customRender(<MainRootPresentational {...defaultProps} />)
 
       expect(screen.getByTestId('mock-expensesTableCard')).toBeInTheDocument()
     })
 
     it('データが登録されている場合、適切なpropsでBalanceTotalCardコンポーネントが表示される', () => {
-      vi.spyOn(BalanceTotalCard, 'BalanceTotalCard').mockImplementation(() => {
-        return <div data-testid='mock-balanceTotalCard'>Mocked BalanceTotalCard</div>
-      })
-
       customRender(<MainRootPresentational {...defaultProps} />)
 
       expect(screen.getByTestId('mock-balanceTotalCard')).toBeInTheDocument()
+    })
+
+    it('適切なpropsでMonthPickerCardコンポーネントが表示される', () => {
+      customRender(<MainRootPresentational {...defaultProps} />)
+
+      expect(screen.getByTestId('mock-monthPickerCard')).toBeInTheDocument()
     })
   })
 })

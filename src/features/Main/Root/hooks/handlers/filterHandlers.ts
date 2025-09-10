@@ -3,7 +3,7 @@
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // 指定した年月のデータだけを取り出す関数
-export const filterByMont = (items: moneyFlowData[], month: Date): moneyFlowData[] => {
+export const filterByMonth = (items: moneyFlowData[], month: Date): moneyFlowData[] => {
   // month:基準となる月
   const getYear = month.getFullYear() // getFullYear()：例:2025年9月15日→2025。基準にする年を保存
   const getMonth = month.getMonth() // getMonth()：例:2025年9月15日→8（0始まり)。基準にする月を保存

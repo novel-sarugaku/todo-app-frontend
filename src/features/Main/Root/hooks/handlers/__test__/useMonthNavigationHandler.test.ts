@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
 import { act } from 'react'
+import { describe, it, expect } from 'vitest'
 
 import { customRenderHook } from '@/tests/helpers/customRenderHook'
 import { useMonthNavigationHandler } from '@/features/Main/Root/hooks/handlers/useMonthNavigationHandler'
@@ -54,6 +54,22 @@ describe('goNextMonth', () => {
 
       expect(result.current.currentMonth.getFullYear()).toBe(2025)
       expect(result.current.currentMonth.getMonth()).toBe(8) // 9月
+      expect(result.current.currentMonth.getDate()).toBe(1)
+    })
+  })
+})
+
+describe('goToMonth', () => {
+  describe('正常系', () => {
+    it('指定した年月の1日に更新される', () => {
+      const { result } = customRenderHook(() => useMonthNavigationHandler(mockMoneyFlowData))
+
+      act(() => {
+        result.current.goToMonth(2025, 0) // 0 = 1月
+      })
+
+      expect(result.current.currentMonth.getFullYear()).toBe(2025)
+      expect(result.current.currentMonth.getMonth()).toBe(0) // 1月
       expect(result.current.currentMonth.getDate()).toBe(1)
     })
   })

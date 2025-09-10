@@ -26,8 +26,8 @@ describe('buildYearMonthLabelFromItems', () => {
       expect(buildYearMonthLabelFromItems(mockMoneyFlowData)).toBe('2025年9月')
     })
 
-    it('該当データが無い月は「—年—月」を返す', () => {
-      expect(buildYearMonthLabelFromItems([])).toBe('—年—月')
+    it('該当データが無い月は「年月を選択」を返す', () => {
+      expect(buildYearMonthLabelFromItems([])).toBe('年月を選択')
     })
   })
 })

@@ -6,6 +6,9 @@ import { MainRootContainer } from '@/features/Main/Root/MainRootContainer'
 import * as Presentational from '@/features/Main/Root/MainRootPresentational'
 import * as moneyFlowListHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowListHandler'
 import * as monthNavigationHandler from '@/features/Main/Root/hooks/handlers/useMonthNavigationHandler'
+import * as filterHandlers from '@/features/Main/Root/hooks/handlers/filterHandlers'
+import * as labelHandlers from '@/features/Main/Root/hooks/handlers/labelHandlers'
+import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
 import type { moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
@@ -30,13 +33,31 @@ vi.spyOn(moneyFlowListHandler, 'useMoneyFlowListHandler').mockReturnValue({
 })
 
 // Mocking the useMonthNavigationHandler hook
-const mockCurrentMonth = new Date(2025, 8, 1)
-const mockGoPrev = vi.fn()
-const mockGoNext = vi.fn()
+const mockCurrentMonth = new Date(2025, 8, 5)
+const mockGoToMonth = vi.fn()
 vi.spyOn(monthNavigationHandler, 'useMonthNavigationHandler').mockReturnValue({
   currentMonth: mockCurrentMonth,
-  goPrevMonth: mockGoPrev,
-  goNextMonth: mockGoNext,
+  goToMonth: mockGoToMonth,
+} as unknown as ReturnType<typeof monthNavigationHandler.useMonthNavigationHandler>)
+
+// Mocking the filterByMonth hook
+const mockMonthlyItems = mockData
+vi.spyOn(filterHandlers, 'filterByMonth').mockReturnValue(mockMonthlyItems)
+
+// Mocking the buildYearMonthLabelFromItems hook
+const mockYearAndMonthLabel = '2025年9月'
+vi.spyOn(labelHandlers, 'buildYearMonthLabelFromItems').mockReturnValue(mockYearAndMonthLabel)
+
+// Mocking the useViewYearHandler hook
+const mockViewYear = 2025
+const mockOnViewPrevYea = vi.fn()
+const mockOnViewNextYear = vi.fn()
+const mockSetViewYear = vi.fn()
+vi.spyOn(viewYearHandler, 'useViewYearHandler').mockReturnValue({
+  viewYear: mockViewYear,
+  onViewPrevYear: mockOnViewPrevYea,
+  onViewNextYear: mockOnViewNextYear,
+  setViewYear: mockSetViewYear,
 })
 
 describe('MainRootContainer', () => {
@@ -48,10 +69,14 @@ describe('MainRootContainer', () => {
 
       expect(PresentationalSpy.mock.calls[0][0]).toEqual(
         expect.objectContaining({
-          items: mockData,
-          currentMonth: mockCurrentMonth,
-          onPrevMonth: mockGoPrev,
-          onNextMonth: mockGoNext,
+          monthlyItems: mockMonthlyItems,
+          yearAndMonthLabel: mockYearAndMonthLabel,
+          onChangeMonth: mockGoToMonth,
+          currentYear: mockCurrentMonth.getFullYear(),
+          currentMonth: mockCurrentMonth.getMonth(),
+          viewYear: mockViewYear,
+          onViewPrevYear: mockOnViewPrevYea,
+          onViewNextYear: mockOnViewNextYear,
         }),
       )
     })

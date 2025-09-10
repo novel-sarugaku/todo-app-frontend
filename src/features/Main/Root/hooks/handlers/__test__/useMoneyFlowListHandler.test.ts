@@ -39,7 +39,6 @@ describe('useMoneyFlowListHandler', () => {
     } as unknown as UseQueryResult<GetMoneyFlowsResponse>)
 
     const { result } = customRenderHook(() => useMoneyFlowListHandler())
-    console.log(result.current.data)
 
     expect(result.current.data).toEqual([])
   })

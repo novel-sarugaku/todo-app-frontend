@@ -1,72 +1,78 @@
-import { Container, Show, Box, Text, HStack, Flex } from '@chakra-ui/react'
-import { SlArrowLeft } from 'react-icons/sl'
-import { SlArrowRight } from 'react-icons/sl'
+import { Container, Show, Box, Text, HStack, Grid } from '@chakra-ui/react'
 
 import { Header } from '@/components/organisms/Header'
 import { IncomeTableCard } from '@/features/Main/Root/ui/IncomeTableCard/IncomeTableCard'
 import { ExpensesTableCard } from '@/features/Main/Root/ui/ExpensesTableCard/ExpensesTableCard'
 import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
-import { filterByMont } from './hooks/handlers/filterHandlers'
-import { buildYearMonthLabelFromItems } from './hooks/handlers/labelHandlers'
+import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
 import { type moneyFlowData } from './types/moneyFlowData'
 
 interface MainRootPresentationalProps {
-  items: moneyFlowData[]
-  currentMonth: Date
-  onPrevMonth: () => void
-  onNextMonth: () => void
+  monthlyItems: moneyFlowData[]
+  yearAndMonthLabel: string
+  onChangeMonth: (year: number, monthIndex0to11: number) => void
+  currentYear: number
+  currentMonth: number
+  viewYear: number
+  onViewPrevYear: () => void
+  onViewNextYear: () => void
 }
 
 export const MainRootPresentational = ({
-  items,
+  monthlyItems,
+  yearAndMonthLabel,
+  onChangeMonth,
+  currentYear,
   currentMonth,
-  onPrevMonth,
-  onNextMonth,
+  viewYear,
+  onViewPrevYear,
+  onViewNextYear,
 }: MainRootPresentationalProps) => {
-  const monthlyItems = filterByMont(items, currentMonth)
-  const yearAndMonthLabel = buildYearMonthLabelFromItems(monthlyItems)
-
   return (
     <>
       <Header />
       <Container>
         <Show when={monthlyItems.length === 0}>
-          <Box>
-            <HStack pt={16} align={'center'} justify={'center'}>
-              <SlArrowLeft data-testid='prev-icon' onClick={onPrevMonth} cursor={'pointer'} />
-              <Text>{yearAndMonthLabel}</Text>
-              <SlArrowRight data-testid='next-icon' onClick={onNextMonth} cursor={'pointer'} />
-            </HStack>
+          <Box justifySelf='center' pt={14}>
+            <MonthPickerCard
+              yearAndMonthLabel={yearAndMonthLabel}
+              onChangeMonth={onChangeMonth}
+              currentYear={currentYear}
+              currentMonth={currentMonth}
+              viewYear={viewYear}
+              onViewPrevYear={onViewPrevYear}
+              onViewNextYear={onViewNextYear}
+            />
           </Box>
 
           <Box mt={'150px'} p={4} bg={'blue.100'} borderRadius={'2xl'} border={'1px solid'}>
             <Text whiteSpace={'pre-line'}>
               {`選択した年月は収入・支出ともに登録がありません。
-              画面右上に表示されている「収支を登録する」ボタンから登録してください。
-              登録後こちらに一覧が表示されます。`}
+                  画面右上に表示されている「収支を登録する」ボタンから登録してください。
+                  登録後こちらに一覧が表示されます。`}
             </Text>
           </Box>
         </Show>
 
         <Show when={monthlyItems.length > 0}>
-          <Flex pt={10} align={'center'}>
-            {/* 左：画面の32%固定 */}
-            <Box flex='32% 0 0'>
+          {/* templateColumns="1fr auto 1fr"：左余白・中身・右余白の3列構成を作る */}
+          <Grid templateColumns='1fr auto 1fr' pt={10}>
+            <Box justifySelf='start'>
               <BalanceTotalCard items={monthlyItems} />
             </Box>
 
-            {/* 中央：残りスペース使用 */}
-            <Box flex='1 0 0'>
-              <HStack justify={'center'}>
-                <SlArrowLeft data-testid='prev-icon' onClick={onPrevMonth} cursor={'pointer'} />
-                <Text>{yearAndMonthLabel}</Text>
-                <SlArrowRight data-testid='next-icon' onClick={onNextMonth} cursor={'pointer'} />
-              </HStack>
-            </Box>
-
-            {/* 右：画面の32%固定 */}
-            <Box flex='32% 0 0' />
-          </Flex>
+            <HStack>
+              <MonthPickerCard
+                yearAndMonthLabel={yearAndMonthLabel}
+                onChangeMonth={onChangeMonth}
+                currentYear={currentYear}
+                currentMonth={currentMonth}
+                viewYear={viewYear}
+                onViewPrevYear={onViewPrevYear}
+                onViewNextYear={onViewNextYear}
+              />
+            </HStack>
+          </Grid>
         </Show>
 
         {/* monthlyItems.some(...) :条件に当てはまる要素が1つでもあるかを調べる関数 */}

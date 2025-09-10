@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
 import {
-  filterByMont,
+  filterByMonth,
   filterIncome,
   filterExpense,
 } from '@/features/Main/Root/hooks/handlers/filterHandlers'
@@ -38,17 +38,17 @@ const mockMoneyFlowData: moneyFlowData[] = [
   },
 ]
 
-describe('filterByMont', () => {
+describe('filterByMonth', () => {
   describe('正常系', () => {
     it('指定した年月（2025-09）のデータのみを返す', () => {
       const mockMonth = new Date(2025, 8, 1) // 基準となる月（9月)を用意。0始まりのため8 = 9月
-      const mockResponse = filterByMont(mockMoneyFlowData, mockMonth).map((data) => data.id) // 2025年9月のデータだけ抽出し、idだけの配列に変換
+      const mockResponse = filterByMonth(mockMoneyFlowData, mockMonth).map((data) => data.id) // 2025年9月のデータだけ抽出し、idだけの配列に変換
       expect(mockResponse).toEqual([1, 2]) // 9月の2件（id: 1, 2）
     })
 
     it('該当データが無い月は空配列を返す（2025-11）', () => {
       const month = new Date(2025, 10, 1) // 0始まりのため10 = 11月
-      expect(filterByMont(mockMoneyFlowData, month)).toEqual([])
+      expect(filterByMonth(mockMoneyFlowData, month)).toEqual([])
     })
   })
 })
