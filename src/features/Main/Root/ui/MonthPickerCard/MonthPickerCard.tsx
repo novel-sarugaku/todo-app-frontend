@@ -1,37 +1,20 @@
 import { Text, HStack, Grid, Popover, Button } from '@chakra-ui/react'
 import { SlArrowLeft } from 'react-icons/sl'
 import { SlArrowRight } from 'react-icons/sl'
+import { monthLabels } from '@/models/constants/monthLabels'
+import { formatMonthly } from '@/share/utils/format/dateFormatters'
 
 interface MonthPickerCardProps {
-  yearAndMonthLabel: string
-  onChangeMonth: (year: number, monthIndex0to11: number) => void
-  currentYear: number
-  currentMonth: number
+  targetDate: Date
+  onSubmitTargetDate: (year: number, monthIndex0to11: number) => void
   viewYear: number
   onViewPrevYear: () => void
   onViewNextYear: () => void
 }
 
-const monthLabels = [
-  '1月',
-  '2月',
-  '3月',
-  '4月',
-  '5月',
-  '6月',
-  '7月',
-  '8月',
-  '9月',
-  '10月',
-  '11月',
-  '12月',
-]
-
 export const MonthPickerCard = ({
-  yearAndMonthLabel,
-  onChangeMonth,
-  currentYear,
-  currentMonth,
+  targetDate,
+  onSubmitTargetDate,
   viewYear,
   onViewPrevYear,
   onViewNextYear,
@@ -41,7 +24,7 @@ export const MonthPickerCard = ({
       <Popover.Root>
         {/* asChild：子コンポーネント(Button)をトリガーに使う */}
         <Popover.Trigger asChild>
-          <Button color={'black'}>【{yearAndMonthLabel}】</Button>
+          <Button color={'black'}>【{formatMonthly(targetDate)}】</Button>
         </Popover.Trigger>
 
         <Popover.Positioner>
@@ -76,10 +59,13 @@ export const MonthPickerCard = ({
                 {monthLabels.map((label, index) => (
                   <Button
                     key={label}
-                    // aria-label={'changeMonthBtn'}
-                    color={viewYear === currentYear && index === currentMonth ? 'gray.50' : 'black'}
+                    color={
+                      viewYear === targetDate.getFullYear() && index === targetDate.getMonth()
+                        ? 'blue.500'
+                        : 'black'
+                    }
                     onClick={() => {
-                      onChangeMonth(viewYear, index)
+                      onSubmitTargetDate(viewYear, index)
                     }}
                   >
                     {label}

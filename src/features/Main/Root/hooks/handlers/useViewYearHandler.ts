@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from 'react'
 
-export const useViewYearHandler = (currentMonth: Date) => {
+export const useViewYearHandler = (targetDate: Date) => {
   // 現在表示している年
-  const [viewYear, setViewYear] = useState(currentMonth.getFullYear())
+  const [viewYear, setViewYear] = useState(targetDate.getFullYear())
 
   useEffect(() => {
     // 選ばれている月が変わったら、その年にviewYearをセット
     // .getFullYear()で年だけ取り出して、setViewYearに渡してviewYearを更新
-    setViewYear(currentMonth.getFullYear())
-  }, [currentMonth]) // currentMonthが変わったときだけ、useEffectの中身を実行
+    setViewYear(targetDate.getFullYear())
+  }, [targetDate]) // targetDateが変わったときだけ、useEffectの中身を実行
 
   // ＜ ボタンを押したときの処理
   // viewYearを1年減らす
@@ -24,5 +24,5 @@ export const useViewYearHandler = (currentMonth: Date) => {
     setViewYear((prevYear) => prevYear + 1)
   }
 
-  return { viewYear, onViewPrevYear, onViewNextYear, setViewYear }
+  return { viewYear, onViewPrevYear, onViewNextYear }
 }

@@ -5,17 +5,17 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { customRender } from '@/tests/helpers/customRender'
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
 
-const mockYearAndMonthLabel = '2025年9月'
-const mockGoToMonth = vi.fn()
-const mockCurrentMonth = new Date(2025, 8, 1)
+const mockTargetDate = new Date('2025-09-01T12:00:00Z')
+const mockTargetDateFullYear = mockTargetDate.getFullYear()
+const mockTargetDateMonth = mockTargetDate.getMonth() + 1
+const mockTargetDateString = `${mockTargetDateFullYear.toString()}年${mockTargetDateMonth.toString()}月`
+const mockoOnSubmitTargetDate = vi.fn()
 const mockViewYear = 2025
 const mockOnViewPrevYear = vi.fn()
 const mockOnViewNextYear = vi.fn()
 const defaultProps = {
-  yearAndMonthLabel: mockYearAndMonthLabel,
-  onChangeMonth: mockGoToMonth,
-  currentYear: mockCurrentMonth.getFullYear(),
-  currentMonth: mockCurrentMonth.getMonth(),
+  targetDate: mockTargetDate,
+  onSubmitTargetDate: mockoOnSubmitTargetDate,
   viewYear: mockViewYear,
   onViewPrevYear: mockOnViewPrevYear,
   onViewNextYear: mockOnViewNextYear,
@@ -40,14 +40,16 @@ describe('MonthPickerCard', () => {
     it('データが登録されている月を表示した場合、「【2025年9月】」が表示される', () => {
       customRender(<MonthPickerCard {...defaultProps} />)
 
-      expect(screen.getByRole('button', { name: '【2025年9月】' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: `【${mockTargetDateString}】` }),
+      ).toBeInTheDocument()
     })
 
     it('トリガーをクリックするとポップオーバーが開き、月ボタンが表示される', async () => {
       customRender(<MonthPickerCard {...defaultProps} />)
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '【2025年9月】' }))
+        fireEvent.click(screen.getByRole('button', { name: `【${mockTargetDateString}】` }))
       })
 
       await waitFor(() => {
@@ -57,16 +59,16 @@ describe('MonthPickerCard', () => {
       })
     })
 
-    it('選択した月ボタンの文字色がgray.50になる', async () => {
+    it('選択した月ボタンの文字色がblue.500になる', async () => {
       customRender(<MonthPickerCard {...defaultProps} />)
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '【2025年9月】' }))
+        fireEvent.click(screen.getByRole('button', { name: `【${mockTargetDateString}】` }))
       })
 
       await waitFor(() => {
         expect(getComputedStyle(screen.getByRole('button', { name: '9月' })).color).toBe(
-          'var(--chakra-colors-gray-50)',
+          'var(--chakra-colors-blue-500)',
         )
       })
     })
@@ -75,7 +77,7 @@ describe('MonthPickerCard', () => {
       customRender(<MonthPickerCard {...defaultProps} />)
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '【2025年9月】' }))
+        fireEvent.click(screen.getByRole('button', { name: `【${mockTargetDateString}】` }))
       })
 
       await waitFor(() => {
@@ -89,7 +91,7 @@ describe('MonthPickerCard', () => {
       customRender(<MonthPickerCard {...defaultProps} />)
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '【2025年9月】' }))
+        fireEvent.click(screen.getByRole('button', { name: `【${mockTargetDateString}】` }))
       })
 
       await waitFor(() => {
@@ -103,7 +105,7 @@ describe('MonthPickerCard', () => {
       customRender(<MonthPickerCard {...defaultProps} />)
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '【2025年9月】' }))
+        fireEvent.click(screen.getByRole('button', { name: `【${mockTargetDateString}】` }))
       })
 
       await waitFor(() => {
@@ -113,18 +115,18 @@ describe('MonthPickerCard', () => {
       expect(mockOnViewNextYear).toHaveBeenCalledTimes(1)
     })
 
-    it('月ボタンを押すと、onChangeMonthが呼ばれる', async () => {
+    it('月ボタンを押すと、mockoOnSubmitTargetDateが呼ばれる', async () => {
       customRender(<MonthPickerCard {...defaultProps} />)
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '【2025年9月】' }))
+        fireEvent.click(screen.getByRole('button', { name: `【${mockTargetDateString}】` }))
       })
 
       await waitFor(() => {
         fireEvent.click(screen.getByRole('button', { name: '8月' }))
       })
 
-      expect(mockGoToMonth).toHaveBeenCalledTimes(1)
+      expect(mockoOnSubmitTargetDate).toHaveBeenCalledTimes(1)
     })
   })
 })

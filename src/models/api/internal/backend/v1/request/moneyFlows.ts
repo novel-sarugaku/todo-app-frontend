@@ -1,4 +1,4 @@
-export type Kind = 'income' | 'expense'
+import { type Kind } from '@/models/constants/kind'
 
 // POSTリクエスト
 export type CreateMoneyFlowRequest = {

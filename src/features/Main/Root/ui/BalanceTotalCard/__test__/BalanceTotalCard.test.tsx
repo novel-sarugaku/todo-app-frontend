@@ -1,34 +1,14 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { screen } from '@testing-library/react'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
-import type { moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
-const mockData: moneyFlowData[] = [
-  {
-    id: 1,
-    title: 'mockTitle1',
-    amount: 20,
-    occurred_date: '2025-09-01T12:00:00Z',
-    kind: 'income',
-  },
-  {
-    id: 2,
-    title: 'mockTitle2',
-    amount: 1,
-    occurred_date: '2025-09-01T12:00:00Z',
-    kind: 'expense',
-  },
-]
-const mockCurrentMonth = new Date(2025, 8, 1)
-const mockGoPrev = vi.fn()
-const mockGoNext = vi.fn()
+const mockTargetDate = new Date('2025-09-01T12:00:00Z')
+const mockTargetMonthlyTotalAmount = 20
 const defaultProps = {
-  items: mockData,
-  currentMonth: mockCurrentMonth,
-  onPrevMonth: mockGoPrev,
-  onNextMonth: mockGoNext,
+  targetDate: mockTargetDate,
+  targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
 }
 
 describe('BalanceTotalCard', () => {
@@ -37,61 +17,31 @@ describe('BalanceTotalCard', () => {
       customRender(<BalanceTotalCard {...defaultProps} />)
 
       expect(screen.getByText('2025年9月 収支合計額')).toBeInTheDocument()
-      expect(screen.getByText('19円')).toBeInTheDocument() // 20 - 1
+      expect(screen.getByText('20円')).toBeInTheDocument()
     })
   })
 
   it('大きい金額はカンマ区切りで表示される', () => {
-    const mockBigAmountData: moneyFlowData[] = [
-      {
-        id: 1,
-        title: 'mockTitle1',
-        amount: 50000000,
-        occurred_date: '2025-09-01T12:00:00Z',
-        kind: 'income',
-      },
-      {
-        id: 2,
-        title: 'mockTitle2',
-        amount: 200000,
-        occurred_date: '2025-09-01T12:00:00Z',
-        kind: 'expense',
-      },
-    ]
+    const mockTargetMonthlyTotalAmount = 4000
     const mockBigAmountProps = {
       ...defaultProps,
-      items: mockBigAmountData,
+      targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
     }
 
     customRender(<BalanceTotalCard {...mockBigAmountProps} />)
 
-    expect(screen.getByText('49,800,000円')).toBeInTheDocument() // 5000000 - 200000
+    expect(screen.getByText('4,000円')).toBeInTheDocument() // 5000000 - 200000
   })
 
   it('支出が収入を上回る場合がマイナス金額が表示される', () => {
-    const mockNegativeAmountData: moneyFlowData[] = [
-      {
-        id: 1,
-        title: 'mockTitle1',
-        amount: 500,
-        occurred_date: '2025-09-01T12:00:00Z',
-        kind: 'income',
-      },
-      {
-        id: 2,
-        title: 'mockTitle2',
-        amount: 30000,
-        occurred_date: '2025-09-01T12:00:00Z',
-        kind: 'expense',
-      },
-    ]
+    const mockTargetMonthlyTotalAmount = -20
     const mockNegativeAmountProps = {
       ...defaultProps,
-      items: mockNegativeAmountData,
+      targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
     }
 
     customRender(<BalanceTotalCard {...mockNegativeAmountProps} />)
 
-    expect(screen.getByText('-29,500円')).toBeInTheDocument() // 500 - 30000
+    expect(screen.getByText('-20円')).toBeInTheDocument()
   })
 })

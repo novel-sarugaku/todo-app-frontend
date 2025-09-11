@@ -4,12 +4,9 @@ import { screen } from '@testing-library/react'
 import { customRender } from '@/tests/helpers/customRender'
 import { MainRootContainer } from '@/features/Main/Root/MainRootContainer'
 import * as Presentational from '@/features/Main/Root/MainRootPresentational'
-import * as moneyFlowListHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowListHandler'
-import * as monthNavigationHandler from '@/features/Main/Root/hooks/handlers/useMonthNavigationHandler'
-import * as filterHandlers from '@/features/Main/Root/hooks/handlers/filterHandlers'
-import * as labelHandlers from '@/features/Main/Root/hooks/handlers/labelHandlers'
+import * as moneyFlowsHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowsHandler'
 import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
-import type { moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
 const PresentationalSpy = vi
@@ -19,45 +16,42 @@ const PresentationalSpy = vi
   })
 
 // Mocking the useMoneyFlowListHandle hook
-const mockData: moneyFlowData[] = [
+const mockData: moneyFlowDateTypeData[] = [
   {
     id: 1,
     title: 'mockTitle',
     amount: 100,
-    occurred_date: '2025-09-05T12:00:00Z',
+    occurred_date: new Date('2025-09-05T12:00:00Z'),
     kind: 'income',
   },
 ]
-vi.spyOn(moneyFlowListHandler, 'useMoneyFlowListHandler').mockReturnValue({
-  data: mockData,
+
+// Mocking the useMoneyFlowsHandler hoostk
+const mockTargetDate = new Date('2025-09-01T12:00:00Z')
+const mockTargetMonthlyTotalAmount = 2500
+const mockTargetMonthlyIncomeData = mockData
+const mockTargetMonthlyIncomeTotalAmount = 4000
+const mockTargetMonthlyExpenseData = mockData
+const mockTargetMonthlyExpenseTotalAmount = 1500
+const mockoOnSubmitTargetDate = vi.fn()
+vi.spyOn(moneyFlowsHandler, 'useMoneyFlowsHandler').mockReturnValue({
+  targetDate: mockTargetDate,
+  targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
+  targetMonthlyIncomeData: mockTargetMonthlyIncomeData,
+  targetMonthlyIncomeTotalAmount: mockTargetMonthlyIncomeTotalAmount,
+  targetMonthlyExpenseData: mockTargetMonthlyExpenseData,
+  targetMonthlyExpenseTotalAmount: mockTargetMonthlyExpenseTotalAmount,
+  onSubmitTargetDate: mockoOnSubmitTargetDate,
 })
-
-// Mocking the useMonthNavigationHandler hook
-const mockCurrentMonth = new Date(2025, 8, 5)
-const mockGoToMonth = vi.fn()
-vi.spyOn(monthNavigationHandler, 'useMonthNavigationHandler').mockReturnValue({
-  currentMonth: mockCurrentMonth,
-  goToMonth: mockGoToMonth,
-} as unknown as ReturnType<typeof monthNavigationHandler.useMonthNavigationHandler>)
-
-// Mocking the filterByMonth hook
-const mockMonthlyItems = mockData
-vi.spyOn(filterHandlers, 'filterByMonth').mockReturnValue(mockMonthlyItems)
-
-// Mocking the buildYearMonthLabelFromItems hook
-const mockYearAndMonthLabel = '2025年9月'
-vi.spyOn(labelHandlers, 'buildYearMonthLabelFromItems').mockReturnValue(mockYearAndMonthLabel)
 
 // Mocking the useViewYearHandler hook
 const mockViewYear = 2025
 const mockOnViewPrevYea = vi.fn()
 const mockOnViewNextYear = vi.fn()
-const mockSetViewYear = vi.fn()
 vi.spyOn(viewYearHandler, 'useViewYearHandler').mockReturnValue({
   viewYear: mockViewYear,
   onViewPrevYear: mockOnViewPrevYea,
   onViewNextYear: mockOnViewNextYear,
-  setViewYear: mockSetViewYear,
 })
 
 describe('MainRootContainer', () => {
@@ -69,14 +63,16 @@ describe('MainRootContainer', () => {
 
       expect(PresentationalSpy.mock.calls[0][0]).toEqual(
         expect.objectContaining({
-          monthlyItems: mockMonthlyItems,
-          yearAndMonthLabel: mockYearAndMonthLabel,
-          onChangeMonth: mockGoToMonth,
-          currentYear: mockCurrentMonth.getFullYear(),
-          currentMonth: mockCurrentMonth.getMonth(),
+          targetDate: mockTargetDate,
+          targetMonthlyIncomeData: mockTargetMonthlyIncomeData,
+          targetMonthlyIncomeTotalAmount: mockTargetMonthlyIncomeTotalAmount,
+          targetMonthlyExpenseData: mockTargetMonthlyExpenseData,
+          targetMonthlyExpenseTotalAmount: mockTargetMonthlyExpenseTotalAmount,
+          onSubmitTargetDate: mockoOnSubmitTargetDate,
           viewYear: mockViewYear,
           onViewPrevYear: mockOnViewPrevYea,
           onViewNextYear: mockOnViewNextYear,
+          targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
         }),
       )
     })

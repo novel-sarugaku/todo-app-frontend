@@ -1,18 +1,16 @@
 import { Box, Table } from '@chakra-ui/react'
 
-import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
-import { formatPrice } from '@/features/Main/Root/hooks/handlers/formatters'
-import { balanceTotal } from '@/features/Main/Root/hooks/handlers/amountCalculators'
-import { buildYearMonthLabelFromItems } from '@/features/Main/Root/hooks/handlers/labelHandlers'
+import { formatMonthly } from '@/share/utils/format/dateFormatters'
 
 interface MainRootPresentationalProps {
-  items: moneyFlowData[]
+  targetDate: Date
+  targetMonthlyTotalAmount: number
 }
 
-export const BalanceTotalCard = ({ items }: MainRootPresentationalProps) => {
-  const balanceTotalValue = balanceTotal(items)
-  const yearAndMonthLabel = buildYearMonthLabelFromItems(items)
-
+export const BalanceTotalCard = ({
+  targetDate,
+  targetMonthlyTotalAmount,
+}: MainRootPresentationalProps) => {
   return (
     <>
       <Box textAlign={'start'}>
@@ -24,14 +22,14 @@ export const BalanceTotalCard = ({ items }: MainRootPresentationalProps) => {
                 fontWeight={'bold'}
                 border={'1px solid black'}
               >
-                {yearAndMonthLabel} 収支合計額
+                {formatMonthly(targetDate)} 収支合計額
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             <Table.Row>
               <Table.Cell textAlign='center' borderColor={'black'} border={'1px solid black'}>
-                {formatPrice(balanceTotalValue)}円
+                {targetMonthlyTotalAmount.toLocaleString('ja-JP')}円
               </Table.Cell>
             </Table.Row>
           </Table.Body>

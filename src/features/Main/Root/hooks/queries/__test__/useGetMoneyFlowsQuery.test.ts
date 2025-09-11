@@ -5,6 +5,7 @@ import { customRenderHook } from '@/tests/helpers/customRenderHook'
 import { useGetMoneyFlowsQuery } from '../useGetMoneyFlowsQuery'
 import * as moneyFlowsService from '@/services/internal/backend/v1/moneyFlows'
 import { type GetMoneyFlowsResponse } from '@/models/api/internal/backend/v1/response/moneyFlows'
+import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
 
 const mockMoneyFlowItemResponse: GetMoneyFlowsResponse = [
   {
@@ -15,17 +16,23 @@ const mockMoneyFlowItemResponse: GetMoneyFlowsResponse = [
     kind: 'income',
   },
 ]
+const convertedData: moneyFlowDateTypeData[] = mockMoneyFlowItemResponse.map((item) => ({
+  ...item,
+  occurred_date: new Date(item.occurred_date),
+}))
 
 describe('useGetMoneyFlowsQuery', () => {
   describe('正常系', () => {
-    it('収支データ全件取得APIの呼び出しに成功した場合、正しいレスポンスが返る', async () => {
+    it('収支データ全件取得APIで受け取ったoccurred_dateがDate型に変換された形で返される', async () => {
       vi.spyOn(moneyFlowsService, 'getMoneyFlows').mockResolvedValue(mockMoneyFlowItemResponse)
 
       const { result } = customRenderHook(() => useGetMoneyFlowsQuery())
 
       await waitFor(() => {
-        expect(result.current.data).toEqual(mockMoneyFlowItemResponse)
+        expect(result.current.data).toEqual(convertedData)
       })
+
+      console.log(result.current.data)
 
       expect(result.current.isLoading).toBe(false)
       expect(result.current.isSuccess).toBe(true)

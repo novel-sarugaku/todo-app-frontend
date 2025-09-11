@@ -1,44 +1,45 @@
 import { Container, Show, Box, Text, HStack, Grid } from '@chakra-ui/react'
 
 import { Header } from '@/components/organisms/Header'
-import { IncomeTableCard } from '@/features/Main/Root/ui/IncomeTableCard/IncomeTableCard'
-import { ExpensesTableCard } from '@/features/Main/Root/ui/ExpensesTableCard/ExpensesTableCard'
 import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
+import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
-import { type moneyFlowData } from './types/moneyFlowData'
+import { type moneyFlowDateTypeData } from './types/moneyFlowData'
 
 interface MainRootPresentationalProps {
-  monthlyItems: moneyFlowData[]
-  yearAndMonthLabel: string
-  onChangeMonth: (year: number, monthIndex0to11: number) => void
-  currentYear: number
-  currentMonth: number
+  targetDate: Date
+  targetMonthlyIncomeData: moneyFlowDateTypeData[]
+  targetMonthlyIncomeTotalAmount: number
+  targetMonthlyExpenseData: moneyFlowDateTypeData[]
+  targetMonthlyExpenseTotalAmount: number
+  onSubmitTargetDate: (year: number, monthIndex0to11: number) => void
   viewYear: number
   onViewPrevYear: () => void
   onViewNextYear: () => void
+  targetMonthlyTotalAmount: number
 }
 
 export const MainRootPresentational = ({
-  monthlyItems,
-  yearAndMonthLabel,
-  onChangeMonth,
-  currentYear,
-  currentMonth,
+  targetDate,
+  targetMonthlyIncomeData,
+  targetMonthlyIncomeTotalAmount,
+  targetMonthlyExpenseData,
+  targetMonthlyExpenseTotalAmount,
+  onSubmitTargetDate,
   viewYear,
   onViewPrevYear,
   onViewNextYear,
+  targetMonthlyTotalAmount,
 }: MainRootPresentationalProps) => {
   return (
     <>
       <Header />
       <Container>
-        <Show when={monthlyItems.length === 0}>
+        <Show when={targetMonthlyIncomeData.length === 0 && targetMonthlyExpenseData.length === 0}>
           <Box justifySelf='center' pt={14}>
             <MonthPickerCard
-              yearAndMonthLabel={yearAndMonthLabel}
-              onChangeMonth={onChangeMonth}
-              currentYear={currentYear}
-              currentMonth={currentMonth}
+              targetDate={targetDate}
+              onSubmitTargetDate={onSubmitTargetDate}
               viewYear={viewYear}
               onViewPrevYear={onViewPrevYear}
               onViewNextYear={onViewNextYear}
@@ -54,19 +55,20 @@ export const MainRootPresentational = ({
           </Box>
         </Show>
 
-        <Show when={monthlyItems.length > 0}>
+        <Show when={targetMonthlyIncomeData.length > 0 || targetMonthlyExpenseData.length > 0}>
           {/* templateColumns="1fr auto 1fr"：左余白・中身・右余白の3列構成を作る */}
           <Grid templateColumns='1fr auto 1fr' pt={10}>
             <Box justifySelf='start'>
-              <BalanceTotalCard items={monthlyItems} />
+              <BalanceTotalCard
+                targetDate={targetDate}
+                targetMonthlyTotalAmount={targetMonthlyTotalAmount}
+              />
             </Box>
 
             <HStack>
               <MonthPickerCard
-                yearAndMonthLabel={yearAndMonthLabel}
-                onChangeMonth={onChangeMonth}
-                currentYear={currentYear}
-                currentMonth={currentMonth}
+                targetDate={targetDate}
+                onSubmitTargetDate={onSubmitTargetDate}
                 viewYear={viewYear}
                 onViewPrevYear={onViewPrevYear}
                 onViewNextYear={onViewNextYear}
@@ -75,15 +77,23 @@ export const MainRootPresentational = ({
           </Grid>
         </Show>
 
-        {/* monthlyItems.some(...) :条件に当てはまる要素が1つでもあるかを調べる関数 */}
-        <Show when={monthlyItems.some((item) => item.kind === 'income')}>
-          <Box pt={10}>
-            <IncomeTableCard items={monthlyItems} />
+        {/* targetMonthlyData.some(...) :条件に当てはまる要素が1つでもあるかを調べる関数 */}
+        <Show when={targetMonthlyIncomeData.length > 0}>
+          <Box py={10}>
+            <MoneyFlowDetailTableCard
+              items={targetMonthlyIncomeData}
+              totalAmount={targetMonthlyIncomeTotalAmount}
+              kindFlag={'income'}
+            />
           </Box>
         </Show>
-        <Show when={monthlyItems.some((item) => item.kind === 'expense')}>
+        <Show when={targetMonthlyExpenseData.length > 0}>
           <Box py={10}>
-            <ExpensesTableCard items={monthlyItems} />
+            <MoneyFlowDetailTableCard
+              items={targetMonthlyExpenseData}
+              totalAmount={targetMonthlyExpenseTotalAmount}
+              kindFlag={'expense'}
+            />
           </Box>
         </Show>
       </Container>

@@ -1,27 +1,31 @@
 import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentational'
-import { useMoneyFlowListHandler } from './hooks/handlers/useMoneyFlowListHandler'
-import { useMonthNavigationHandler } from './hooks/handlers/useMonthNavigationHandler'
-import { filterByMonth } from './hooks/handlers/filterHandlers'
-import { buildYearMonthLabelFromItems } from './hooks/handlers/labelHandlers'
+import { useMoneyFlowsHandler } from './hooks/handlers/useMoneyFlowsHandler'
 import { useViewYearHandler } from './hooks/handlers/useViewYearHandler'
 
 export const MainRootContainer = () => {
-  const { data = [] } = useMoneyFlowListHandler()
-  const { currentMonth, goToMonth } = useMonthNavigationHandler(data)
-  const monthlyItems = filterByMonth(data, currentMonth)
-  const yearAndMonthLabel = buildYearMonthLabelFromItems(monthlyItems)
-  const { viewYear, onViewPrevYear, onViewNextYear } = useViewYearHandler(currentMonth)
+  const {
+    targetDate,
+    targetMonthlyTotalAmount,
+    targetMonthlyIncomeData,
+    targetMonthlyIncomeTotalAmount,
+    targetMonthlyExpenseData,
+    targetMonthlyExpenseTotalAmount,
+    onSubmitTargetDate,
+  } = useMoneyFlowsHandler()
+  const { viewYear, onViewPrevYear, onViewNextYear } = useViewYearHandler(targetDate)
 
   return (
     <MainRootPresentational
-      monthlyItems={monthlyItems}
-      yearAndMonthLabel={yearAndMonthLabel}
-      onChangeMonth={goToMonth}
-      currentYear={currentMonth.getFullYear()}
-      currentMonth={currentMonth.getMonth()}
+      targetDate={targetDate}
+      targetMonthlyIncomeData={targetMonthlyIncomeData}
+      targetMonthlyIncomeTotalAmount={targetMonthlyIncomeTotalAmount}
+      targetMonthlyExpenseData={targetMonthlyExpenseData}
+      targetMonthlyExpenseTotalAmount={targetMonthlyExpenseTotalAmount}
+      onSubmitTargetDate={onSubmitTargetDate}
       viewYear={viewYear}
       onViewPrevYear={onViewPrevYear}
       onViewNextYear={onViewNextYear}
+      targetMonthlyTotalAmount={targetMonthlyTotalAmount}
     />
   )
 }

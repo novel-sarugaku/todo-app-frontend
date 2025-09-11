@@ -3,60 +3,60 @@ import { screen } from '@testing-library/react'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentational'
-import * as IncomeTableCard from '@/features/Main/Root/ui/IncomeTableCard/IncomeTableCard'
-import * as ExpensesTableCard from '@/features/Main/Root/ui/ExpensesTableCard/ExpensesTableCard'
 import * as BalanceTotalCard from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
+import * as MoneyFlowDetailTableCard from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import * as MonthPicker from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
-import type { moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
 
-const mockData: moneyFlowData[] = [
+const mockTargetDate = new Date('2025-09-01T12:00:00Z')
+const mockData: moneyFlowDateTypeData[] = [
   {
     id: 1,
     title: 'mockTitle1',
     amount: 100,
-    occurred_date: '2025-09-05T12:00:00Z',
+    occurred_date: new Date('2025-09-05T12:00:00Z'),
     kind: 'income',
   },
   {
     id: 2,
     title: 'mockTitle2',
     amount: 200,
-    occurred_date: '2025-09-05T12:00:00Z',
+    occurred_date: new Date('2025-09-05T12:00:00Z'),
     kind: 'expense',
   },
 ]
-const mockYearAndMonthLabel = '2025年9月'
-const mockGoToMonth = vi.fn()
-const mockCurrentMonth = new Date(2025, 8, 5)
+const mockTargetMonthlyIncomeData = mockData
+const mockTargetMonthlyIncomeTotalAmount = 4000
+const mockTargetMonthlyExpenseData = mockData
+const mockTargetMonthlyExpenseTotalAmount = 1500
+const mockoOnSubmitTargetDate = vi.fn()
 const mockViewYear = 2025
 const mockOnViewPrevYear = vi.fn()
 const mockOnViewNextYear = vi.fn()
+const mockTargetMonthlyTotalAmount = 2500
 const defaultProps = {
-  monthlyItems: mockData,
-  yearAndMonthLabel: mockYearAndMonthLabel,
-  onChangeMonth: mockGoToMonth,
-  currentYear: mockCurrentMonth.getFullYear(),
-  currentMonth: mockCurrentMonth.getMonth(),
+  targetDate: mockTargetDate,
+  targetMonthlyIncomeData: mockTargetMonthlyIncomeData,
+  targetMonthlyIncomeTotalAmount: mockTargetMonthlyIncomeTotalAmount,
+  targetMonthlyExpenseData: mockTargetMonthlyExpenseData,
+  targetMonthlyExpenseTotalAmount: mockTargetMonthlyExpenseTotalAmount,
+  onSubmitTargetDate: mockoOnSubmitTargetDate,
   viewYear: mockViewYear,
   onViewPrevYear: mockOnViewPrevYear,
   onViewNextYear: mockOnViewNextYear,
+  targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
 }
 const noDataInformation =
   /選択した年月は収入・支出ともに登録がありません。\s画面右上に表示されている「収支を登録する」ボタンから登録してください。\s登録後こちらに一覧が表示されます。/
 
-// Mocking the IncomeTableCard component
-vi.spyOn(IncomeTableCard, 'IncomeTableCard').mockImplementation(() => {
-  return <div data-testid='mock-incomeTableCard'>Mocked IncomeTableCard</div>
-})
-
-// Mocking the ExpensesTableCard component
-vi.spyOn(ExpensesTableCard, 'ExpensesTableCard').mockImplementation(() => {
-  return <div data-testid='mock-expensesTableCard'>Mocked ExpensesTableCard</div>
-})
-
 // Mocking the BalanceTotalCard component
 vi.spyOn(BalanceTotalCard, 'BalanceTotalCard').mockImplementation(() => {
   return <div data-testid='mock-balanceTotalCard'>Mocked BalanceTotalCard</div>
+})
+
+// Mocking the MoneyFlowDetailTableCard component
+vi.spyOn(MoneyFlowDetailTableCard, 'MoneyFlowDetailTableCard').mockImplementation(() => {
+  return <div data-testid='mock-moneyFlowDetailTableCard'>Mocked MoneyFlowDetailTableCard</div>
 })
 
 // Mocking the MonthPickerCard component
@@ -66,10 +66,11 @@ vi.spyOn(MonthPicker, 'MonthPickerCard').mockImplementation(() => {
 
 describe('MainRootPresentational', () => {
   describe('正常系', () => {
-    it('データが登録されていない月を表示した場合、データがない場合の案内とが表示される', () => {
+    it('データが登録されていない月を表示した場合、データがない場合の案内が表示される', () => {
       const noDataProps = {
         ...defaultProps,
-        monthlyItems: [],
+        targetMonthlyIncomeData: [],
+        targetMonthlyExpenseData: [],
       }
 
       customRender(<MainRootPresentational {...noDataProps} />)
@@ -77,16 +78,10 @@ describe('MainRootPresentational', () => {
       expect(screen.getByText(noDataInformation)).toBeInTheDocument()
     })
 
-    it('収入データが登録されている場合、適切なpropsでIncomeTableCardコンポーネントが表示される', () => {
+    it('収支データが登録されている場合、適切なpropsでMoneyFlowDetailTableCardコンポーネントが表示される', () => {
       customRender(<MainRootPresentational {...defaultProps} />)
 
-      expect(screen.getByTestId('mock-incomeTableCard')).toBeInTheDocument()
-    })
-
-    it('支出データが登録されている場合、適切なpropsでExpensesTableCardコンポーネントが表示される', () => {
-      customRender(<MainRootPresentational {...defaultProps} />)
-
-      expect(screen.getByTestId('mock-expensesTableCard')).toBeInTheDocument()
+      expect(screen.getAllByTestId('mock-moneyFlowDetailTableCard')).toHaveLength(2)
     })
 
     it('データが登録されている場合、適切なpropsでBalanceTotalCardコンポーネントが表示される', () => {
