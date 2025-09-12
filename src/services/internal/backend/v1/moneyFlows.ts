@@ -12,7 +12,7 @@ import {
 
 // 全件取得
 export const getMoneyFlows = async (): Promise<GetMoneyFlowsResponse> => {
-  const response = await internalBackendV1Client.get<GetMoneyFlowsResponse>('/money_flows', {})
+  const response = await internalBackendV1Client.get<GetMoneyFlowsResponse>('/money_flows')
   return response.data
 }
 
