@@ -32,8 +32,6 @@ describe('useGetMoneyFlowsQuery', () => {
         expect(result.current.data).toEqual(convertedData)
       })
 
-      console.log(result.current.data)
-
       expect(result.current.isLoading).toBe(false)
       expect(result.current.isSuccess).toBe(true)
     })
