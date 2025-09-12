@@ -5,19 +5,10 @@ import {
   type UpdateMoneyFlowRequest,
 } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import {
-  type GetMoneyFlowResponseItem,
   type GetMoneyFlowsResponse,
   type CreateMoneyFlowResponse,
   type UpdateMoneyFlowResponse,
 } from '@/models/api/internal/backend/v1/response/moneyFlows'
-
-// 1件取得
-export const getMoneyFlow = async (id: number): Promise<GetMoneyFlowResponseItem> => {
-  const response = await internalBackendV1Client.get<GetMoneyFlowResponseItem>(
-    `/money_flows/${String(id)}`,
-  )
-  return response.data
-}
 
 // 全件取得
 export const getMoneyFlows = async (): Promise<GetMoneyFlowsResponse> => {

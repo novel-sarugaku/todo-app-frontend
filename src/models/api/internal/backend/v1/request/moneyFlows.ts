@@ -1,8 +1,11 @@
+import { type Kind } from '@/models/constants/kind'
+
 // POSTリクエスト
 export type CreateMoneyFlowRequest = {
   title: string
   amount: number
   occurred_date: string
+  kind: Kind
 }
 
 // PUTリクエスト
@@ -11,6 +14,7 @@ export type UpdateMoneyFlowRequest = {
   title: string
   amount: number
   occurred_date: string
+  kind: Kind
 }
 
 // DELETEリクエスト
