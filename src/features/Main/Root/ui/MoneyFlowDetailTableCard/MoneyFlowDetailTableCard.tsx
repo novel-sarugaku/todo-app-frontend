@@ -2,12 +2,12 @@ import { Box, Table } from '@chakra-ui/react'
 import { CiMemoPad } from 'react-icons/ci'
 import { AiTwotoneDelete } from 'react-icons/ai'
 
-import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'
 import { formatMonthly, formatDate } from '@/share/utils/format/dateFormatters'
 
 interface MainRootPresentationalProps {
-  items: moneyFlowDateTypeData[]
+  items: moneyFlowData[]
   totalAmount: number
   kindFlag: Kind
 }

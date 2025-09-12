@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { type GetMoneyFlowsResponse } from '@/models/api/internal/backend/v1/response/moneyFlows'
-import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { moneyFlowsQueryKeys } from './queryKeys'
 import { getMoneyFlows } from '@/services/internal/backend/v1/moneyFlows'
 
 // 全件取得
 export const useGetMoneyFlowsQuery = () => {
   // APIの生データ型(GetMoneyFlowsResponse)、アプリ内で変換したい型（MoneyFlow[]）
-  return useQuery<GetMoneyFlowsResponse, Error, moneyFlowDateTypeData[]>({
+  return useQuery<GetMoneyFlowsResponse, Error, moneyFlowData[]>({
     queryKey: moneyFlowsQueryKeys.all,
     queryFn: () => getMoneyFlows(),
     // React Query v5でのデータ変換方法

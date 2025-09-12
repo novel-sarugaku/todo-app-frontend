@@ -4,13 +4,13 @@ import { Header } from '@/components/organisms/Header'
 import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
 import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
-import { type moneyFlowDateTypeData } from './types/moneyFlowData'
+import { type moneyFlowData } from './types/moneyFlowData'
 
 interface MainRootPresentationalProps {
   targetDate: Date
-  targetMonthlyIncomeData: moneyFlowDateTypeData[]
+  targetMonthlyIncomeData: moneyFlowData[]
   targetMonthlyIncomeTotalAmount: number
-  targetMonthlyExpenseData: moneyFlowDateTypeData[]
+  targetMonthlyExpenseData: moneyFlowData[]
   targetMonthlyExpenseTotalAmount: number
   onSubmitTargetDate: (year: number, monthIndex0to11: number) => void
   viewYear: number

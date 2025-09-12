@@ -3,7 +3,7 @@ import { screen, within } from '@testing-library/react'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { MoneyFlowDetailTableCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
-import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'
 
 const mockTitle1 = 'mockTitle1'
@@ -11,7 +11,7 @@ const mockTitle2 = 'mockTitle2'
 const mockOccurredDate1 = new Date('2025-09-02T12:00:00Z')
 const mockOccurredDate2 = new Date('2025-09-05T12:00:00Z')
 const mockKind = 'income'
-const mockData: moneyFlowDateTypeData[] = [
+const mockData: moneyFlowData[] = [
   {
     id: 1,
     title: mockTitle1,

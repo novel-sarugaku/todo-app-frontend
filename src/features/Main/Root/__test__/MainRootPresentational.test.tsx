@@ -6,10 +6,10 @@ import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentatio
 import * as BalanceTotalCard from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
 import * as MoneyFlowDetailTableCard from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import * as MonthPicker from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
-import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 const mockTargetDate = new Date('2025-09-01T12:00:00Z')
-const mockData: moneyFlowDateTypeData[] = [
+const mockData: moneyFlowData[] = [
   {
     id: 1,
     title: 'mockTitle1',

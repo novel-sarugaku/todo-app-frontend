@@ -6,7 +6,7 @@ import { MainRootContainer } from '@/features/Main/Root/MainRootContainer'
 import * as Presentational from '@/features/Main/Root/MainRootPresentational'
 import * as moneyFlowsHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowsHandler'
 import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
-import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
 const PresentationalSpy = vi
@@ -16,7 +16,7 @@ const PresentationalSpy = vi
   })
 
 // Mocking the useMoneyFlowListHandle hook
-const mockData: moneyFlowDateTypeData[] = [
+const mockData: moneyFlowData[] = [
   {
     id: 1,
     title: 'mockTitle',

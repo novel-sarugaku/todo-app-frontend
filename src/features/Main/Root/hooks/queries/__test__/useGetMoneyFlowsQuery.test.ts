@@ -5,7 +5,7 @@ import { customRenderHook } from '@/tests/helpers/customRenderHook'
 import { useGetMoneyFlowsQuery } from '../useGetMoneyFlowsQuery'
 import * as moneyFlowsService from '@/services/internal/backend/v1/moneyFlows'
 import { type GetMoneyFlowsResponse } from '@/models/api/internal/backend/v1/response/moneyFlows'
-import { type moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
+import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 const mockMoneyFlowItemResponse: GetMoneyFlowsResponse = [
   {
@@ -16,7 +16,7 @@ const mockMoneyFlowItemResponse: GetMoneyFlowsResponse = [
     kind: 'income',
   },
 ]
-const convertedData: moneyFlowDateTypeData[] = mockMoneyFlowItemResponse.map((item) => ({
+const convertedData: moneyFlowData[] = mockMoneyFlowItemResponse.map((item) => ({
   ...item,
   occurred_date: new Date(item.occurred_date),
 }))

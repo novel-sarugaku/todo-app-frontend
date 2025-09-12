@@ -5,14 +5,14 @@ import { customRenderHook } from '@/tests/helpers/customRenderHook'
 import { useMoneyFlowsHandler } from '@/features/Main/Root/hooks/handlers/useMoneyFlowsHandler'
 import * as getMoneyFlowsQuery from '@/features/Main/Root/hooks/queries/useGetMoneyFlowsQuery'
 import type { UseQueryResult } from '@tanstack/react-query'
-import type { moneyFlowDateTypeData } from '@/features/Main/Root/types/moneyFlowData'
+import type { moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // 時間設定
 vi.useFakeTimers()
 vi.setSystemTime(new Date(2023, 8, 1))
 
 // Mocking the useGetMoneyFlowsQuer hook
-const mockData: moneyFlowDateTypeData[] = [
+const mockData: moneyFlowData[] = [
   { id: 1, title: 'Salary', amount: 5000, occurred_date: new Date('2023-09-01'), kind: 'income' }, // 月初
   {
     id: 2,
@@ -32,13 +32,13 @@ const mockData: moneyFlowDateTypeData[] = [
   }, // 前月
   { id: 6, title: 'Bonus', amount: 1000, occurred_date: new Date('2023-10-01'), kind: 'income' }, // 翌月
   { id: 7, title: 'Gift', amount: 300, occurred_date: new Date('2022-10-15'), kind: 'income' }, // 前年
-] as moneyFlowDateTypeData[]
+] as moneyFlowData[]
 
 const useGetMoneyFlowsQuerySpy = vi
   .spyOn(getMoneyFlowsQuery, 'useGetMoneyFlowsQuery')
   .mockReturnValue({
     data: mockData,
-  } as UseQueryResult<moneyFlowDateTypeData[]>)
+  } as UseQueryResult<moneyFlowData[]>)
 
 describe('useMoneyFlowsHandler', () => {
   describe('正常系', () => {
@@ -77,7 +77,7 @@ describe('useMoneyFlowsHandler', () => {
   it('dataがない場合、データー配列は[]、合計は0を返す', () => {
     useGetMoneyFlowsQuerySpy.mockReturnValue({
       data: undefined,
-    } as UseQueryResult<moneyFlowDateTypeData[]>)
+    } as UseQueryResult<moneyFlowData[]>)
 
     const { result } = customRenderHook(() => useMoneyFlowsHandler())
 
