@@ -8,13 +8,13 @@ const mockTargetMonth = new Date(2025, 8, 1)
 
 describe('useViewYearHandler', () => {
   describe('正常系', () => {
-    it('初期値はtargetMonthの年になる', () => {
+    it('viewYearの初期値は引数:targetMonthの年になる', () => {
       const { result } = customRenderHook(() => useViewYearHandler(mockTargetMonth))
 
       expect(result.current.viewYear).toBe(2025)
     })
 
-    it('onViewPrevYearによりtargetMonthの前年になる', () => {
+    it('onViewPrevYearの発火によりviewYearはtargetMonthの前年になる', () => {
       const { result } = customRenderHook(() => useViewYearHandler(mockTargetMonth))
 
       act(() => {
@@ -24,7 +24,7 @@ describe('useViewYearHandler', () => {
       expect(result.current.viewYear).toBe(2024)
     })
 
-    it('onViewNextYearによりtargetMonthの翌年になる', () => {
+    it('onViewNextYearの発火によりviewYearはtargetMonthの翌年になる', () => {
       const { result } = customRenderHook(() => useViewYearHandler(mockTargetMonth))
 
       act(() => {
