@@ -11,8 +11,8 @@ export const useMoneyFlowsHandler = () => {
   const targetMonthlyData = data
     .filter((item) => {
       const startDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), 1)
-      const endDate = new Date(targetDate.getFullYear(), targetDate.getMonth() + 1, 0)
-      return startDate <= item.occurred_date && item.occurred_date <= endDate
+      const endDate = new Date(targetDate.getFullYear(), targetDate.getMonth() + 1, 1)
+      return startDate <= item.occurred_date && item.occurred_date < endDate
     })
     .sort((dateA, dateB) => dateB.occurred_date.getTime() - dateA.occurred_date.getTime())
 
