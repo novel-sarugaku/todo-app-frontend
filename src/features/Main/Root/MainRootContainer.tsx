@@ -1,6 +1,7 @@
 import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentational'
 import { useMoneyFlowsHandler } from './hooks/handlers/useMoneyFlowsHandler'
 import { useViewYearHandler } from './hooks/handlers/useViewYearHandler'
+import { useCreateMoneyFlowHandler } from './hooks/handlers/useCreateMoneyFlowHandler'
 
 export const MainRootContainer = () => {
   const {
@@ -13,6 +14,7 @@ export const MainRootContainer = () => {
     onSubmitTargetDate,
   } = useMoneyFlowsHandler()
   const { viewYear, onViewPrevYear, onViewNextYear } = useViewYearHandler(targetDate)
+  const { handleCreateMoneyFlow } = useCreateMoneyFlowHandler()
 
   return (
     <MainRootPresentational
@@ -26,6 +28,7 @@ export const MainRootContainer = () => {
       onViewPrevYear={onViewPrevYear}
       onViewNextYear={onViewNextYear}
       targetMonthlyTotalAmount={targetMonthlyTotalAmount}
+      handleCreateMoneyFlow={handleCreateMoneyFlow}
     />
   )
 }

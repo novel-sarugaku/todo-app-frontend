@@ -5,6 +5,7 @@ import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/Balan
 import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
 import { type moneyFlowData } from './types/moneyFlowData'
+import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
 interface MainRootPresentationalProps {
   targetDate: Date
@@ -17,6 +18,7 @@ interface MainRootPresentationalProps {
   onViewPrevYear: () => void
   onViewNextYear: () => void
   targetMonthlyTotalAmount: number
+  handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
 }
 
 export const MainRootPresentational = ({
