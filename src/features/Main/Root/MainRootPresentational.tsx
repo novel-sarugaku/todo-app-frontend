@@ -6,6 +6,7 @@ import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlo
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
 import { type moneyFlowData } from './types/moneyFlowData'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
+import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
 
 interface MainRootPresentationalProps {
   targetDate: Date
@@ -19,6 +20,8 @@ interface MainRootPresentationalProps {
   onViewNextYear: () => void
   targetMonthlyTotalAmount: number
   handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
+  onCheckedChange: (checked: { checked: boolean }) => void
+  isIncome: boolean
 }
 
 export const MainRootPresentational = ({
@@ -32,21 +35,34 @@ export const MainRootPresentational = ({
   onViewPrevYear,
   onViewNextYear,
   targetMonthlyTotalAmount,
+  handleCreateMoneyFlow,
+  onCheckedChange,
+  isIncome,
 }: MainRootPresentationalProps) => {
   return (
     <>
       <Header />
       <Container>
         <Show when={targetMonthlyIncomeData.length === 0 && targetMonthlyExpenseData.length === 0}>
-          <Box justifySelf='center' pt={14}>
-            <MonthPickerCard
-              targetDate={targetDate}
-              onSubmitTargetDate={onSubmitTargetDate}
-              viewYear={viewYear}
-              onViewPrevYear={onViewPrevYear}
-              onViewNextYear={onViewNextYear}
-            />
-          </Box>
+          <Grid templateColumns='1fr auto 1fr' pt={10}>
+            <Box />
+            <HStack>
+              <MonthPickerCard
+                targetDate={targetDate}
+                onSubmitTargetDate={onSubmitTargetDate}
+                viewYear={viewYear}
+                onViewPrevYear={onViewPrevYear}
+                onViewNextYear={onViewNextYear}
+              />
+            </HStack>
+            <Box justifySelf='end'>
+              <CreateDialogCard
+                handleCreateMoneyFlow={handleCreateMoneyFlow}
+                onCheckedChange={onCheckedChange}
+                isIncome={isIncome}
+              />
+            </Box>
+          </Grid>
 
           <Box mt={'150px'} p={4} bg={'blue.100'} borderRadius={'2xl'} border={'1px solid'}>
             <Text whiteSpace={'pre-line'}>
@@ -76,6 +92,13 @@ export const MainRootPresentational = ({
                 onViewNextYear={onViewNextYear}
               />
             </HStack>
+            <Box justifySelf='end' alignSelf='center'>
+              <CreateDialogCard
+                handleCreateMoneyFlow={handleCreateMoneyFlow}
+                onCheckedChange={onCheckedChange}
+                isIncome={isIncome}
+              />
+            </Box>
           </Grid>
         </Show>
 

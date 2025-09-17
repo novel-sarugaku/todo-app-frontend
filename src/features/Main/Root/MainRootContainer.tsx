@@ -14,7 +14,7 @@ export const MainRootContainer = () => {
     onSubmitTargetDate,
   } = useMoneyFlowsHandler()
   const { viewYear, onViewPrevYear, onViewNextYear } = useViewYearHandler(targetDate)
-  const { handleCreateMoneyFlow } = useCreateMoneyFlowHandler()
+  const { handleCreateMoneyFlow, onCheckedChange, isIncome } = useCreateMoneyFlowHandler()
 
   return (
     <MainRootPresentational
@@ -29,6 +29,8 @@ export const MainRootContainer = () => {
       onViewNextYear={onViewNextYear}
       targetMonthlyTotalAmount={targetMonthlyTotalAmount}
       handleCreateMoneyFlow={handleCreateMoneyFlow}
+      onCheckedChange={onCheckedChange}
+      isIncome={isIncome}
     />
   )
 }
