@@ -23,7 +23,7 @@ const mockCreateMoneyFlowRequest: CreateMoneyFlowRequest = {
 
 describe('useCreateMoneyFlowHandler', () => {
   describe('正常系', () => {
-    it('handleCreateMoneyFlowが呼ばれたとき、mutateに正しいリクエストが渡される', () => {
+    it('handleCreateMoneyFlowが呼ばれたとき、mutateに正しいリクエストが渡され、登録後にダイアログが閉じる', () => {
       const { result } = customRenderHook(() => useCreateMoneyFlowHandler())
 
       act(() => {
@@ -32,6 +32,43 @@ describe('useCreateMoneyFlowHandler', () => {
 
       expect(mockMutate).toHaveBeenCalledTimes(1)
       expect(mockMutate).toHaveBeenCalledWith(mockCreateMoneyFlowRequest)
+
+      expect(result.current.isDialogOpen).toBe(false)
+    })
+
+    it('onDialogOpenChangeがtrueのときはダイアログが開き、falseのときは閉じる', () => {
+      const { result } = customRenderHook(() => useCreateMoneyFlowHandler())
+
+      act(() => {
+        result.current.onDialogOpenChange(true)
+      })
+
+      expect(result.current.isDialogOpen).toBe(true)
+
+      act(() => {
+        result.current.onDialogOpenChange(false)
+      })
+
+      expect(result.current.isDialogOpen).toBe(false)
+    })
+
+    it('onCheckedChangeでchecked=trueのときisIncome=trueになり、checked=falseのときisIncome=falseになる', () => {
+      const { result } = customRenderHook(() => useCreateMoneyFlowHandler())
+
+      expect(result.current.isIncome).toBe(false) // expense（初期値）
+
+      act(() => {
+        result.current.onCheckedChange({ checked: true }) // incomeに切り替え
+      })
+
+      expect(result.current.isIncome).toBe(true) // income
+
+      act(() => {
+        result.current.onCheckedChange({ checked: false }) // expenseに切り替え
+      })
+
+      expect(result.current.isIncome).toBe(false) // expense
+
     })
   })
 })

@@ -43,6 +43,11 @@ export const useMoneyFlowsHandler = () => {
     setTargetDate(new Date(year, monthIndex0to11, 1))
   }
 
+  const jumpToMonthByOccurredDate = (occurredDate: string) => {
+    const dateValue = new Date(occurredDate)
+    onSubmitTargetDate(dateValue.getFullYear(), dateValue.getMonth())
+  }
+
   return {
     targetDate,
     targetMonthlyTotalAmount,
@@ -51,5 +56,6 @@ export const useMoneyFlowsHandler = () => {
     targetMonthlyExpenseData,
     targetMonthlyExpenseTotalAmount,
     onSubmitTargetDate,
+    jumpToMonthByOccurredDate,
   }
 }

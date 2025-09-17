@@ -18,12 +18,18 @@ interface CreateDialogCardProps {
   handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
   onCheckedChange: ({ checked }: { checked: boolean }) => void
   isIncome: boolean
+  isDialogOpen: boolean
+  onDialogOpenChange: (open: boolean) => void
+  jumpToMonthByOccurredDate: (occurred: string) => void
 }
 
 export const CreateDialogCard = ({
   handleCreateMoneyFlow,
   onCheckedChange,
   isIncome,
+  isDialogOpen,
+  onDialogOpenChange,
+  jumpToMonthByOccurredDate,
 }: CreateDialogCardProps) => {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault() // デフォルトのフォーム送信を防止
@@ -40,11 +46,27 @@ export const CreateDialogCard = ({
       occurred_date: occurredDateData,
       kind: kindData,
     })
+
+    jumpToMonthByOccurredDate(occurredDateData)
+
+    console.log('登録成功しました！')
+    console.log('Data:', kindData, occurredDateData, titleData, amountData)
   }
 
   return (
     <>
-      <Dialog.Root>
+      {/* 「収支を登録する」ボタンを押す
+      →Dialog.Triggerが内部的に「開く」イベントを発火
+      →onOpenChangeが呼ばれる
+      →その引数event.openがtrueになる
+      →onDialogOpenChange(event.open)が呼ばれる
+      →setDialogOpen(true)が実行 */}
+      <Dialog.Root
+        open={isDialogOpen} //現状
+        onOpenChange={(event) => {
+          onDialogOpenChange(event.open)
+        }}
+      >
         <Dialog.Trigger asChild>
           <Button color={'black'} bgColor={'orange.100'} borderColor={'black'}>
             収支を登録する
@@ -91,15 +113,33 @@ export const CreateDialogCard = ({
 
                     <Field.Root>
                       <Field.Label fontWeight={'bold'}>発生日</Field.Label>
-                      <Input bgColor={'white'} borderColor={'black'} name='occurred_date' />
+                      <Input
+                        required //値を入力しない限りフォームを送信できない
+                        type={'date'}
+                        bgColor={'white'}
+                        borderColor={'black'}
+                        name='occurred_date'
+                      />
                     </Field.Root>
                     <Field.Root>
                       <Field.Label fontWeight={'bold'}>タイトル</Field.Label>
-                      <Input bgColor={'white'} borderColor={'black'} name='title' />
+                      <Input
+                        required
+                        type={'string'}
+                        bgColor={'white'}
+                        borderColor={'black'}
+                        name='title'
+                      />
                     </Field.Root>
                     <Field.Root>
                       <Field.Label fontWeight={'bold'}>金額</Field.Label>
-                      <Input bgColor={'white'} borderColor={'black'} name='amount' />
+                      <Input
+                        required
+                        type={'number'}
+                        bgColor={'white'}
+                        borderColor={'black'}
+                        name='amount'
+                      />
                     </Field.Root>
                   </Stack>
 

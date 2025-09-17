@@ -22,6 +22,9 @@ interface MainRootPresentationalProps {
   handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
   onCheckedChange: (checked: { checked: boolean }) => void
   isIncome: boolean
+  isDialogOpen: boolean,
+  onDialogOpenChange: (open: boolean) => void
+  jumpToMonthByOccurredDate: (occurred: string) => void
 }
 
 export const MainRootPresentational = ({
@@ -38,6 +41,9 @@ export const MainRootPresentational = ({
   handleCreateMoneyFlow,
   onCheckedChange,
   isIncome,
+  isDialogOpen,
+  onDialogOpenChange,
+  jumpToMonthByOccurredDate,
 }: MainRootPresentationalProps) => {
   return (
     <>
@@ -60,6 +66,9 @@ export const MainRootPresentational = ({
                 handleCreateMoneyFlow={handleCreateMoneyFlow}
                 onCheckedChange={onCheckedChange}
                 isIncome={isIncome}
+                isDialogOpen={isDialogOpen}
+                onDialogOpenChange={onDialogOpenChange}
+                jumpToMonthByOccurredDate={jumpToMonthByOccurredDate}
               />
             </Box>
           </Grid>
@@ -97,6 +106,9 @@ export const MainRootPresentational = ({
                 handleCreateMoneyFlow={handleCreateMoneyFlow}
                 onCheckedChange={onCheckedChange}
                 isIncome={isIncome}
+                isDialogOpen={isDialogOpen}
+                onDialogOpenChange={onDialogOpenChange}
+                jumpToMonthByOccurredDate={jumpToMonthByOccurredDate}
               />
             </Box>
           </Grid>
