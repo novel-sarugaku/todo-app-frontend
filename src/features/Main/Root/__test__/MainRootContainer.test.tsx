@@ -6,6 +6,7 @@ import { MainRootContainer } from '@/features/Main/Root/MainRootContainer'
 import * as Presentational from '@/features/Main/Root/MainRootPresentational'
 import * as moneyFlowsHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowsHandler'
 import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
+import * as createMoneyFlowHandler from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowHandler'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
@@ -34,6 +35,7 @@ const mockTargetMonthlyIncomeTotalAmount = 4000
 const mockTargetMonthlyExpenseData = mockData
 const mockTargetMonthlyExpenseTotalAmount = 1500
 const mockoOnSubmitTargetDate = vi.fn()
+const mockJumpToMonthByOccurredDate = vi.fn()
 vi.spyOn(moneyFlowsHandler, 'useMoneyFlowsHandler').mockReturnValue({
   targetDate: mockTargetDate,
   targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
@@ -42,6 +44,7 @@ vi.spyOn(moneyFlowsHandler, 'useMoneyFlowsHandler').mockReturnValue({
   targetMonthlyExpenseData: mockTargetMonthlyExpenseData,
   targetMonthlyExpenseTotalAmount: mockTargetMonthlyExpenseTotalAmount,
   onSubmitTargetDate: mockoOnSubmitTargetDate,
+  jumpToMonthByOccurredDate: mockJumpToMonthByOccurredDate,
 })
 
 // Mocking the useViewYearHandler hook
@@ -52,6 +55,20 @@ vi.spyOn(viewYearHandler, 'useViewYearHandler').mockReturnValue({
   viewYear: mockViewYear,
   onViewPrevYear: mockOnViewPrevYea,
   onViewNextYear: mockOnViewNextYear,
+})
+
+// Mocking the useCreateMoneyFlowHandler hook
+const mockHandleCreateMoneyFlow = vi.fn()
+const mockOnCheckedChange = vi.fn()
+const mockIsIncome = false
+const mockIsDialogOpen = true
+const mockOnDialogOpenChange = vi.fn()
+vi.spyOn(createMoneyFlowHandler, 'useCreateMoneyFlowHandler').mockReturnValue({
+  handleCreateMoneyFlow: mockHandleCreateMoneyFlow,
+  onCheckedChange: mockOnCheckedChange,
+  isIncome: mockIsIncome,
+  isDialogOpen: mockIsDialogOpen,
+  onDialogOpenChange: mockOnDialogOpenChange,
 })
 
 describe('MainRootContainer', () => {
@@ -73,6 +90,12 @@ describe('MainRootContainer', () => {
           onViewPrevYear: mockOnViewPrevYea,
           onViewNextYear: mockOnViewNextYear,
           targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
+          handleCreateMoneyFlow: mockHandleCreateMoneyFlow,
+          onCheckedChange: mockOnCheckedChange,
+          isIncome: mockIsIncome,
+          isDialogOpen: mockIsDialogOpen,
+          onDialogOpenChange: mockOnDialogOpenChange,
+          jumpToMonthByOccurredDate: mockJumpToMonthByOccurredDate,
         }),
       )
     })

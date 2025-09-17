@@ -48,9 +48,6 @@ export const CreateDialogCard = ({
     })
 
     jumpToMonthByOccurredDate(occurredDateData)
-
-    console.log('登録成功しました！')
-    console.log('Data:', kindData, occurredDateData, titleData, amountData)
   }
 
   return (
