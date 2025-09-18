@@ -68,7 +68,6 @@ describe('useCreateMoneyFlowHandler', () => {
       })
 
       expect(result.current.isIncome).toBe(false) // expense
-
     })
   })
 })

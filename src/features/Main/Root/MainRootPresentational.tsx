@@ -1,12 +1,13 @@
 import { Container, Show, Box, Text, HStack, Grid } from '@chakra-ui/react'
+import { Toaster } from '@/components/ui/toaster'
 
 import { Header } from '@/components/organisms/Header'
 import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
 import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
+import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
 import { type moneyFlowData } from './types/moneyFlowData'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
-import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
 
 interface MainRootPresentationalProps {
   targetDate: Date
@@ -22,7 +23,7 @@ interface MainRootPresentationalProps {
   handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
   onCheckedChange: (checked: { checked: boolean }) => void
   isIncome: boolean
-  isDialogOpen: boolean,
+  isDialogOpen: boolean
   onDialogOpenChange: (open: boolean) => void
   jumpToMonthByOccurredDate: (occurred: string) => void
 }
@@ -48,7 +49,9 @@ export const MainRootPresentational = ({
   return (
     <>
       <Header />
+
       <Container>
+        <Toaster />
         <Show when={targetMonthlyIncomeData.length === 0 && targetMonthlyExpenseData.length === 0}>
           <Grid templateColumns='1fr auto 1fr' pt={10}>
             <Box />

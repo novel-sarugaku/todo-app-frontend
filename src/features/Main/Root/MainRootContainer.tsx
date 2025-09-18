@@ -15,13 +15,8 @@ export const MainRootContainer = () => {
     jumpToMonthByOccurredDate,
   } = useMoneyFlowsHandler()
   const { viewYear, onViewPrevYear, onViewNextYear } = useViewYearHandler(targetDate)
-  const {
-    handleCreateMoneyFlow,
-    onCheckedChange,
-    isIncome,
-    isDialogOpen,
-    onDialogOpenChange,
-  } = useCreateMoneyFlowHandler()
+  const { handleCreateMoneyFlow, onCheckedChange, isIncome, isDialogOpen, onDialogOpenChange } =
+    useCreateMoneyFlowHandler()
 
   return (
     <MainRootPresentational

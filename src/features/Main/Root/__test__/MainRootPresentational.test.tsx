@@ -114,7 +114,7 @@ describe('MainRootPresentational', () => {
       expect(screen.getByTestId('mock-monthPickerCard')).toBeInTheDocument()
     })
 
-     it('適切なpropsでCreateDialogCardコンポーネントが表示される', () => {
+    it('適切なpropsでCreateDialogCardコンポーネントが表示される', () => {
       customRender(<MainRootPresentational {...defaultProps} />)
 
       expect(screen.getByTestId('mock-createDialogCard')).toBeInTheDocument()

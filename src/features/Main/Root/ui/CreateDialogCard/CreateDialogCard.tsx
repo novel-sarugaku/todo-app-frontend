@@ -11,6 +11,9 @@ import {
   Grid,
 } from '@chakra-ui/react'
 
+import { toaster } from '@/components/ui/toaster'
+import { formatDateJa } from '@/share/utils/format/dateFormatters'
+import { kindToJa } from '@/share/utils/format/labelFormatters'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type Kind } from '@/models/constants/kind'
 
@@ -40,14 +43,30 @@ export const CreateDialogCard = ({
     const titleData = formData.get('title') as string
     const amountData = formData.get('amount') as string
 
-    handleCreateMoneyFlow({
-      title: titleData,
-      amount: Number(amountData),
-      occurred_date: occurredDateData,
-      kind: kindData,
-    })
+    try {
+      handleCreateMoneyFlow({
+        title: titleData,
+        amount: Number(amountData),
+        occurred_date: occurredDateData,
+        kind: kindData,
+      })
 
-    jumpToMonthByOccurredDate(occurredDateData)
+      jumpToMonthByOccurredDate(occurredDateData)
+
+      const kindLabel = kindToJa(kindData)
+      const occurredJa = formatDateJa(occurredDateData)
+      const amountStr = Number(amountData).toLocaleString('ja-JP')
+
+      toaster.create({
+        description: `「【種別】${kindLabel}【発生日】${occurredJa}【タイトル】${titleData}【金額】${amountStr}円」のデータを登録しました。`,
+        type: 'success',
+      })
+    } catch {
+      toaster.create({
+        description: 'データの登録に失敗しました。',
+        type: 'error',
+      })
+    }
   }
 
   return (

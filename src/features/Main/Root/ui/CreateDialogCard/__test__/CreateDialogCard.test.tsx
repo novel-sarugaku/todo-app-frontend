@@ -1,9 +1,12 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest'
 import { act } from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { toaster } from '@/components/ui/toaster'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
+import { kindToJa } from '@/share/utils/format/labelFormatters'
+import { formatDateJa } from '@/share/utils/format/dateFormatters'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
 const mockTitle = 'お米'
@@ -42,6 +45,21 @@ const openDialogIncomeProps = {
   isDialogOpen: true,
   isIncome: true,
 }
+
+const mockfailingHandleCreateMoneyFlow = vi.fn(() => {
+  throw new Error('登録失敗')
+})
+const mockfailingProps = {
+  ...defaultProps,
+  isDialogOpen: true,
+  handleCreateMoneyFlow: mockfailingHandleCreateMoneyFlow,
+}
+
+// Mocking the toaster
+const mockToasterCreate = toaster.create
+vi.mock('@/components/ui/toaster', () => ({
+  toaster: { create: vi.fn() },
+}))
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -100,6 +118,47 @@ describe('CreateDialogCard', () => {
       customRender(<CreateDialogCard {...openDialogIncomeProps} />)
 
       expect(screen.getByRole('checkbox', { name: '収支選択' })).toBeChecked() // チェックボックスがチェック済み(income選択状態)であることを確認
+    })
+
+    it('登録が成功した場合は、登録が成功した旨トーストが表示される', () => {
+      customRender(<CreateDialogCard {...openDialogOpenProps} />)
+
+      fireEvent.change(screen.getByLabelText('発生日'), { target: { value: mockOccurredDate } })
+      fireEvent.change(screen.getByLabelText('タイトル'), { target: { value: mockTitle } })
+      fireEvent.change(screen.getByLabelText('金額'), { target: { value: mockAmount } })
+
+      act(() => {
+        fireEvent.click(screen.getByRole('button', { name: '登録する' }))
+      })
+
+      expect(mockHandleCreateMoneyFlow).toHaveBeenCalledWith(mockCreateMoneyFlowRequest)
+
+      const expected = `「【種別】${kindToJa(mockKind)}【発生日】${formatDateJa(
+        mockOccurredDate,
+      )}【タイトル】${mockTitle}【金額】${mockAmount.toLocaleString('ja-JP')}円」のデータを登録しました。`
+
+      expect(mockToasterCreate).toHaveBeenCalledWith({
+        description: expected,
+        type: 'success',
+      })
+    })
+    it('登録が失敗した場合は、失敗が成功した旨トーストが表示される', () => {
+      customRender(<CreateDialogCard {...mockfailingProps} />)
+
+      fireEvent.change(screen.getByLabelText('発生日'), { target: { value: mockOccurredDate } })
+      fireEvent.change(screen.getByLabelText('タイトル'), { target: { value: mockTitle } })
+      fireEvent.change(screen.getByLabelText('金額'), { target: { value: mockAmount } })
+
+      act(() => {
+        fireEvent.click(screen.getByRole('button', { name: '登録する' }))
+      })
+
+      expect(mockfailingHandleCreateMoneyFlow).toHaveBeenCalledTimes(1)
+
+      expect(mockToasterCreate).toHaveBeenCalledWith({
+        description: 'データの登録に失敗しました。',
+        type: 'error',
+      })
     })
   })
 })
