@@ -4,7 +4,7 @@ import { useCreateMoneyFlowMutation } from '../mutations/useCreateMoneyFlowMutat
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type Kind } from '@/models/constants/kind'
 
-export const useCreateMoneyFlowHandler = () => {
+export const useCreateMoneyFlowDialogHandler = () => {
   const mutation = useCreateMoneyFlowMutation()
 
   const [kind, setKind] = useState<Kind>('expense')

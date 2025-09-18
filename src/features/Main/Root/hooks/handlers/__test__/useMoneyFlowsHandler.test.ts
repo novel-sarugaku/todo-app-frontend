@@ -94,21 +94,4 @@ describe('useMoneyFlowsHandler', () => {
     expect(result.current.targetMonthlyExpenseData).toEqual([])
     expect(result.current.targetMonthlyExpenseTotalAmount).toBe(0)
   })
-
-  it('jumpToMonthByOccurredDateで対象年月に移動できる', () => {
-    const { result } = customRenderHook(() => useMoneyFlowsHandler())
-
-    expect(result.current.targetDate).toEqual(new Date(2023, 8, 1))
-
-    act(() => {
-      result.current.jumpToMonthByOccurredDate('2023-10-01')
-    })
-
-    expect(result.current.targetDate).toEqual(new Date(2023, 9, 1))
-    expect(result.current.targetMonthlyTotalAmount).toBe(1000)
-    expect(result.current.targetMonthlyIncomeData.map((item) => item.id)).toEqual([6])
-    expect(result.current.targetMonthlyIncomeTotalAmount).toBe(1000)
-    expect(result.current.targetMonthlyExpenseData).toEqual([])
-    expect(result.current.targetMonthlyExpenseTotalAmount).toBe(0)
-  })
 })

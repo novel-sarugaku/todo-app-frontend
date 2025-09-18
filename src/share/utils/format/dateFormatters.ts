@@ -17,11 +17,3 @@ export const formatMonthly = (targetDate: Date): string => {
     month: 'long', // 月を含む文字列 → 例：9月
   })
 }
-
-// 日付フォーマットを整形する関数（トースト表示用）
-export const formatDateJa = (yyyyMmDd: string) => {
-  const [y, m, d] = yyyyMmDd.split('-')
-  const mm = String(Number(m)) // 09 → 9
-  const dd = String(Number(d)) // 08 → 8
-  return `${y}年${mm}月${dd}日`
-}

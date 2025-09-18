@@ -1,17 +1,16 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest'
 import { act } from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-import { toaster } from '@/components/ui/toaster'
+import { toaster } from '@/share/lib/createToaster'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
-import { kindToJa } from '@/share/utils/format/labelFormatters'
-import { formatDateJa } from '@/share/utils/format/dateFormatters'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
 const mockTitle = 'お米'
 const mockAmount = 4200
 const mockOccurredDate = '2025-09-01'
+const targetOccurredDate = new Date(mockOccurredDate)
 const mockKind = 'expense'
 const mockCreateMoneyFlowRequest: CreateMoneyFlowRequest = {
   title: mockTitle,
@@ -25,14 +24,14 @@ const mockOnCheckedChange = vi.fn()
 const mockIsIncome = false
 const mockIsDialogOpen = false
 const mockOnDialogOpenChange = vi.fn()
-const mockJumpToMonthByOccurredDate = vi.fn()
+const mockOnSubmitTargetDate = vi.fn()
 const defaultProps = {
   handleCreateMoneyFlow: mockHandleCreateMoneyFlow,
   onCheckedChange: mockOnCheckedChange,
   isIncome: mockIsIncome,
   isDialogOpen: mockIsDialogOpen,
   onDialogOpenChange: mockOnDialogOpenChange,
-  jumpToMonthByOccurredDate: mockJumpToMonthByOccurredDate,
+  onSubmitTargetDate: mockOnSubmitTargetDate,
 }
 
 const openDialogOpenProps = {
@@ -47,7 +46,7 @@ const openDialogIncomeProps = {
 }
 
 const mockfailingHandleCreateMoneyFlow = vi.fn(() => {
-  throw new Error('登録失敗')
+  throw new Error('データ登録失敗')
 })
 const mockfailingProps = {
   ...defaultProps,
@@ -57,7 +56,7 @@ const mockfailingProps = {
 
 // Mocking the toaster
 const mockToasterCreate = toaster.create
-vi.mock('@/components/ui/toaster', () => ({
+vi.mock('@/share/lib/createToaster', () => ({
   toaster: { create: vi.fn() },
 }))
 
@@ -67,6 +66,24 @@ beforeEach(() => {
 
 describe('CreateDialogCard', () => {
   describe('正常系', () => {
+    it('収支登録ダイアログ上に表示されるべきテキストが表示され、input要素にrequiredが存在する', () => {
+      customRender(<CreateDialogCard {...openDialogOpenProps} />)
+
+      expect(screen.getByText('収支登録')).toBeInTheDocument()
+      expect(screen.getByText('収支選択')).toBeInTheDocument()
+      expect(screen.getByText('支出')).toBeInTheDocument()
+      expect(screen.getByText('発生日')).toBeInTheDocument()
+      expect(screen.getByText('タイトル')).toBeInTheDocument()
+      expect(screen.getByText('金額')).toBeInTheDocument()
+      expect(screen.getByText('登録')).toBeInTheDocument()
+      expect(screen.getByText('戻る')).toBeInTheDocument()
+
+      // .toBeRequired()：requiredの存在を確認
+      expect(screen.getByLabelText('発生日')).toBeRequired()
+      expect(screen.getByLabelText('タイトル')).toBeRequired()
+      expect(screen.getByLabelText('金額')).toBeRequired()
+    })
+
     it('「収支を登録する」ボタンをクリックするとonDialogOpenChange(true)が呼ばれる', async () => {
       customRender(<CreateDialogCard {...defaultProps} />)
 
@@ -80,7 +97,7 @@ describe('CreateDialogCard', () => {
       })
     })
 
-    it('収支選択/発生日/タイトル/金額を入力して送信すると、handleCreateMoneyFlowにリクエストが渡り、jumpToMonthByOccurredDateが呼ばれる', () => {
+    it('収支選択/発生日/タイトル/金額を入力して送信すると、handleCreateMoneyFlowにリクエストが渡り、mockOnSubmitTargetDateが呼ばれる', () => {
       customRender(<CreateDialogCard {...openDialogOpenProps} />)
 
       // .change()：入力操作を再現
@@ -89,23 +106,43 @@ describe('CreateDialogCard', () => {
       fireEvent.change(screen.getByLabelText('金額'), { target: { value: mockAmount } })
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '登録する' }))
+        fireEvent.click(screen.getByRole('button', { name: '登録' }))
       })
 
       expect(mockHandleCreateMoneyFlow).toHaveBeenCalledTimes(1)
       expect(mockHandleCreateMoneyFlow).toHaveBeenCalledWith(mockCreateMoneyFlowRequest)
-      expect(mockJumpToMonthByOccurredDate).toHaveBeenCalledTimes(1)
-      expect(mockJumpToMonthByOccurredDate).toHaveBeenCalledWith(mockOccurredDate)
+      expect(mockOnSubmitTargetDate).toHaveBeenCalledTimes(1)
+      expect(mockOnSubmitTargetDate).toHaveBeenCalledWith(
+        targetOccurredDate.getFullYear(),
+        targetOccurredDate.getMonth(),
+      )
     })
 
     it('発生日/タイトル/金額を未入力で送信すると、handleCreateMoneyFlowは呼ばれない', () => {
       customRender(<CreateDialogCard {...openDialogOpenProps} />)
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '登録する' }))
+        fireEvent.click(screen.getByRole('button', { name: '登録' }))
       })
 
       expect(mockHandleCreateMoneyFlow).not.toHaveBeenCalled()
+    })
+
+    it('発生日/タイトル/金額を未入力で送信すると、要素が無効となる', () => {
+      customRender(<CreateDialogCard {...openDialogOpenProps} />)
+
+      fireEvent.change(screen.getByLabelText('発生日'), { target: { value: null } })
+      fireEvent.change(screen.getByLabelText('タイトル'), { target: { value: null } })
+      fireEvent.change(screen.getByLabelText('金額'), { target: { value: null } })
+
+      act(() => {
+        fireEvent.click(screen.getByRole('button', { name: '登録' }))
+      })
+
+      // .toBeInvalid()：その要素が無効かを確認
+      expect(screen.getByLabelText('発生日')).toBeInvalid()
+      expect(screen.getByLabelText('タイトル')).toBeInvalid()
+      expect(screen.getByLabelText('金額')).toBeInvalid()
     })
 
     it('収支選択が未チェックの場合はexpense(支出)が選択されている', () => {
@@ -120,7 +157,7 @@ describe('CreateDialogCard', () => {
       expect(screen.getByRole('checkbox', { name: '収支選択' })).toBeChecked() // チェックボックスがチェック済み(income選択状態)であることを確認
     })
 
-    it('登録が成功した場合は、登録が成功した旨トーストが表示される', () => {
+    it('登録が成功した場合、トーストを表示する関数が実行される', () => {
       customRender(<CreateDialogCard {...openDialogOpenProps} />)
 
       fireEvent.change(screen.getByLabelText('発生日'), { target: { value: mockOccurredDate } })
@@ -128,21 +165,19 @@ describe('CreateDialogCard', () => {
       fireEvent.change(screen.getByLabelText('金額'), { target: { value: mockAmount } })
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '登録する' }))
+        fireEvent.click(screen.getByRole('button', { name: '登録' }))
       })
 
       expect(mockHandleCreateMoneyFlow).toHaveBeenCalledWith(mockCreateMoneyFlowRequest)
 
-      const expected = `「【種別】${kindToJa(mockKind)}【発生日】${formatDateJa(
-        mockOccurredDate,
-      )}【タイトル】${mockTitle}【金額】${mockAmount.toLocaleString('ja-JP')}円」のデータを登録しました。`
+      const createSuccessMessage = `「【種別】支出【発生日】2025年9月1日【タイトル】${mockTitle}【金額】${mockAmount.toLocaleString('ja-JP')}円」のデータを登録しました。`
 
       expect(mockToasterCreate).toHaveBeenCalledWith({
-        description: expected,
+        description: createSuccessMessage,
         type: 'success',
       })
     })
-    it('登録が失敗した場合は、失敗が成功した旨トーストが表示される', () => {
+    it('登録が失敗した場合、トーストを表示する関数が実行される', () => {
       customRender(<CreateDialogCard {...mockfailingProps} />)
 
       fireEvent.change(screen.getByLabelText('発生日'), { target: { value: mockOccurredDate } })
@@ -150,13 +185,14 @@ describe('CreateDialogCard', () => {
       fireEvent.change(screen.getByLabelText('金額'), { target: { value: mockAmount } })
 
       act(() => {
-        fireEvent.click(screen.getByRole('button', { name: '登録する' }))
+        fireEvent.click(screen.getByRole('button', { name: '登録' }))
       })
 
       expect(mockfailingHandleCreateMoneyFlow).toHaveBeenCalledTimes(1)
 
       expect(mockToasterCreate).toHaveBeenCalledWith({
-        description: 'データの登録に失敗しました。',
+        title: 'データの登録に失敗しました。',
+        description: 'データ登録失敗',
         type: 'error',
       })
     })

@@ -1,7 +1,7 @@
 import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentational'
 import { useMoneyFlowsHandler } from './hooks/handlers/useMoneyFlowsHandler'
 import { useViewYearHandler } from './hooks/handlers/useViewYearHandler'
-import { useCreateMoneyFlowHandler } from './hooks/handlers/useCreateMoneyFlowHandler'
+import { useCreateMoneyFlowDialogHandler } from './hooks/handlers/useCreateMoneyFlowDialogHandler'
 
 export const MainRootContainer = () => {
   const {
@@ -12,11 +12,10 @@ export const MainRootContainer = () => {
     targetMonthlyExpenseData,
     targetMonthlyExpenseTotalAmount,
     onSubmitTargetDate,
-    jumpToMonthByOccurredDate,
   } = useMoneyFlowsHandler()
   const { viewYear, onViewPrevYear, onViewNextYear } = useViewYearHandler(targetDate)
   const { handleCreateMoneyFlow, onCheckedChange, isIncome, isDialogOpen, onDialogOpenChange } =
-    useCreateMoneyFlowHandler()
+    useCreateMoneyFlowDialogHandler()
 
   return (
     <MainRootPresentational
@@ -35,7 +34,6 @@ export const MainRootContainer = () => {
       isIncome={isIncome}
       isDialogOpen={isDialogOpen}
       onDialogOpenChange={onDialogOpenChange}
-      jumpToMonthByOccurredDate={jumpToMonthByOccurredDate}
     />
   )
 }

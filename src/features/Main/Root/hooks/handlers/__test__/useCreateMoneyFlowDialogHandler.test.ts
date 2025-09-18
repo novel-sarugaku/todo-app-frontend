@@ -3,7 +3,7 @@ import { act } from 'react'
 import { type UseMutationResult } from '@tanstack/react-query'
 
 import { customRenderHook } from '@/tests/helpers/customRenderHook'
-import { useCreateMoneyFlowHandler } from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowHandler'
+import { useCreateMoneyFlowDialogHandler } from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowDialogHandler'
 import * as createMoneyFlowMutation from '@/features/Main/Root/hooks/mutations/useCreateMoneyFlowMutation'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type CreateMoneyFlowResponse } from '@/models/api/internal/backend/v1/response/moneyFlows'
@@ -23,8 +23,8 @@ const mockCreateMoneyFlowRequest: CreateMoneyFlowRequest = {
 
 describe('useCreateMoneyFlowHandler', () => {
   describe('正常系', () => {
-    it('handleCreateMoneyFlowが呼ばれたとき、mutateに正しいリクエストが渡され、登録後にダイアログが閉じる', () => {
-      const { result } = customRenderHook(() => useCreateMoneyFlowHandler())
+    it('handleCreateMoneyFlowが呼ばれたとき、mutateに正しいリクエストが渡され、登録後にisDialogOpenがfalseになる', () => {
+      const { result } = customRenderHook(() => useCreateMoneyFlowDialogHandler())
 
       act(() => {
         result.current.handleCreateMoneyFlow(mockCreateMoneyFlowRequest)
@@ -36,8 +36,8 @@ describe('useCreateMoneyFlowHandler', () => {
       expect(result.current.isDialogOpen).toBe(false)
     })
 
-    it('onDialogOpenChangeがtrueのときはダイアログが開き、falseのときは閉じる', () => {
-      const { result } = customRenderHook(() => useCreateMoneyFlowHandler())
+    it('onDialogOpenChangeがtrueのときはisDialogOpenがtrueになる、onDialogOpenChangeがfalseのときはisDialogOpenがfalseになる', () => {
+      const { result } = customRenderHook(() => useCreateMoneyFlowDialogHandler())
 
       act(() => {
         result.current.onDialogOpenChange(true)
@@ -53,7 +53,7 @@ describe('useCreateMoneyFlowHandler', () => {
     })
 
     it('onCheckedChangeでchecked=trueのときisIncome=trueになり、checked=falseのときisIncome=falseになる', () => {
-      const { result } = customRenderHook(() => useCreateMoneyFlowHandler())
+      const { result } = customRenderHook(() => useCreateMoneyFlowDialogHandler())
 
       expect(result.current.isIncome).toBe(false) // expense（初期値）
 

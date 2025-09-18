@@ -6,7 +6,7 @@ import { MainRootContainer } from '@/features/Main/Root/MainRootContainer'
 import * as Presentational from '@/features/Main/Root/MainRootPresentational'
 import * as moneyFlowsHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowsHandler'
 import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
-import * as createMoneyFlowHandler from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowHandler'
+import * as CreateMoneyFlowDialogHandler from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowDialogHandler'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
@@ -35,7 +35,6 @@ const mockTargetMonthlyIncomeTotalAmount = 4000
 const mockTargetMonthlyExpenseData = mockData
 const mockTargetMonthlyExpenseTotalAmount = 1500
 const mockoOnSubmitTargetDate = vi.fn()
-const mockJumpToMonthByOccurredDate = vi.fn()
 vi.spyOn(moneyFlowsHandler, 'useMoneyFlowsHandler').mockReturnValue({
   targetDate: mockTargetDate,
   targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
@@ -44,7 +43,6 @@ vi.spyOn(moneyFlowsHandler, 'useMoneyFlowsHandler').mockReturnValue({
   targetMonthlyExpenseData: mockTargetMonthlyExpenseData,
   targetMonthlyExpenseTotalAmount: mockTargetMonthlyExpenseTotalAmount,
   onSubmitTargetDate: mockoOnSubmitTargetDate,
-  jumpToMonthByOccurredDate: mockJumpToMonthByOccurredDate,
 })
 
 // Mocking the useViewYearHandler hook
@@ -63,7 +61,7 @@ const mockOnCheckedChange = vi.fn()
 const mockIsIncome = false
 const mockIsDialogOpen = true
 const mockOnDialogOpenChange = vi.fn()
-vi.spyOn(createMoneyFlowHandler, 'useCreateMoneyFlowHandler').mockReturnValue({
+vi.spyOn(CreateMoneyFlowDialogHandler, 'useCreateMoneyFlowDialogHandler').mockReturnValue({
   handleCreateMoneyFlow: mockHandleCreateMoneyFlow,
   onCheckedChange: mockOnCheckedChange,
   isIncome: mockIsIncome,
@@ -95,7 +93,6 @@ describe('MainRootContainer', () => {
           isIncome: mockIsIncome,
           isDialogOpen: mockIsDialogOpen,
           onDialogOpenChange: mockOnDialogOpenChange,
-          jumpToMonthByOccurredDate: mockJumpToMonthByOccurredDate,
         }),
       )
     })

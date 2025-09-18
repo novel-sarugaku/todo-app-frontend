@@ -11,8 +11,8 @@ import {
   Grid,
 } from '@chakra-ui/react'
 
-import { toaster } from '@/components/ui/toaster'
-import { formatDateJa } from '@/share/utils/format/dateFormatters'
+import { toaster } from '@/share/lib/createToaster'
+import { formatDate } from '@/share/utils/format/dateFormatters'
 import { kindToJa } from '@/share/utils/format/labelFormatters'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type Kind } from '@/models/constants/kind'
@@ -23,7 +23,7 @@ interface CreateDialogCardProps {
   isIncome: boolean
   isDialogOpen: boolean
   onDialogOpenChange: (open: boolean) => void
-  jumpToMonthByOccurredDate: (occurred: string) => void
+  onSubmitTargetDate: (year: number, monthIndex0to11: number) => void
 }
 
 export const CreateDialogCard = ({
@@ -32,7 +32,7 @@ export const CreateDialogCard = ({
   isIncome,
   isDialogOpen,
   onDialogOpenChange,
-  jumpToMonthByOccurredDate,
+  onSubmitTargetDate,
 }: CreateDialogCardProps) => {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault() // デフォルトのフォーム送信を防止
@@ -43,7 +43,13 @@ export const CreateDialogCard = ({
     const titleData = formData.get('title') as string
     const amountData = formData.get('amount') as string
 
+    const targetYear = occurredDateData.split('-')[0]
+
     try {
+      if (Number(targetYear) < 1970) {
+        throw new Error('1970年未満の年月の指定はできません。')
+      }
+
       handleCreateMoneyFlow({
         title: titleData,
         amount: Number(amountData),
@@ -51,19 +57,22 @@ export const CreateDialogCard = ({
         kind: kindData,
       })
 
-      jumpToMonthByOccurredDate(occurredDateData)
+      const occurredDate = new Date(occurredDateData)
+
+      onSubmitTargetDate(occurredDate.getFullYear(), occurredDate.getMonth())
 
       const kindLabel = kindToJa(kindData)
-      const occurredJa = formatDateJa(occurredDateData)
+      const occurredJa = formatDate(occurredDate)
       const amountStr = Number(amountData).toLocaleString('ja-JP')
 
       toaster.create({
         description: `「【種別】${kindLabel}【発生日】${occurredJa}【タイトル】${titleData}【金額】${amountStr}円」のデータを登録しました。`,
         type: 'success',
       })
-    } catch {
+    } catch (e) {
       toaster.create({
-        description: 'データの登録に失敗しました。',
+        title: 'データの登録に失敗しました。',
+        description: (e as Error).message,
         type: 'error',
       })
     }
@@ -155,6 +164,7 @@ export const CreateDialogCard = ({
                         bgColor={'white'}
                         borderColor={'black'}
                         name='amount'
+                        min={1} // 1以上の整数入力可能
                       />
                     </Field.Root>
                   </Stack>
@@ -170,7 +180,7 @@ export const CreateDialogCard = ({
                         bgColor={'orange.300'}
                         borderColor={'black'}
                       >
-                        登録する
+                        登録
                       </Button>
 
                       <Dialog.ActionTrigger asChild>
@@ -183,7 +193,7 @@ export const CreateDialogCard = ({
                           justifySelf={'end'}
                           mr={7}
                         >
-                          収支一覧に戻る
+                          戻る
                         </Button>
                       </Dialog.ActionTrigger>
                     </Grid>

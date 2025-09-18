@@ -1,5 +1,5 @@
-import { Container, Show, Box, Text, HStack, Grid } from '@chakra-ui/react'
-import { Toaster } from '@/components/ui/toaster'
+import { Container, Show, Box, Text, Flex, Spacer } from '@chakra-ui/react'
+import { Toaster } from '@/components/atoms/toaster'
 
 import { Header } from '@/components/organisms/Header'
 import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
@@ -25,7 +25,6 @@ interface MainRootPresentationalProps {
   isIncome: boolean
   isDialogOpen: boolean
   onDialogOpenChange: (open: boolean) => void
-  jumpToMonthByOccurredDate: (occurred: string) => void
 }
 
 export const MainRootPresentational = ({
@@ -44,7 +43,6 @@ export const MainRootPresentational = ({
   isIncome,
   isDialogOpen,
   onDialogOpenChange,
-  jumpToMonthByOccurredDate,
 }: MainRootPresentationalProps) => {
   return (
     <>
@@ -53,28 +51,28 @@ export const MainRootPresentational = ({
       <Container>
         <Toaster />
         <Show when={targetMonthlyIncomeData.length === 0 && targetMonthlyExpenseData.length === 0}>
-          <Grid templateColumns='1fr auto 1fr' pt={10}>
-            <Box />
-            <HStack>
-              <MonthPickerCard
-                targetDate={targetDate}
-                onSubmitTargetDate={onSubmitTargetDate}
-                viewYear={viewYear}
-                onViewPrevYear={onViewPrevYear}
-                onViewNextYear={onViewNextYear}
-              />
-            </HStack>
-            <Box justifySelf='end'>
+          <Flex pt={10}>
+            <Spacer />
+
+            <MonthPickerCard
+              targetDate={targetDate}
+              onSubmitTargetDate={onSubmitTargetDate}
+              viewYear={viewYear}
+              onViewPrevYear={onViewPrevYear}
+              onViewNextYear={onViewNextYear}
+            />
+
+            <Flex flex='1' justify='flex-end'>
               <CreateDialogCard
                 handleCreateMoneyFlow={handleCreateMoneyFlow}
                 onCheckedChange={onCheckedChange}
                 isIncome={isIncome}
                 isDialogOpen={isDialogOpen}
                 onDialogOpenChange={onDialogOpenChange}
-                jumpToMonthByOccurredDate={jumpToMonthByOccurredDate}
+                onSubmitTargetDate={onSubmitTargetDate}
               />
-            </Box>
-          </Grid>
+            </Flex>
+          </Flex>
 
           <Box mt={'150px'} p={4} bg={'blue.100'} borderRadius={'2xl'} border={'1px solid'}>
             <Text whiteSpace={'pre-line'}>
@@ -86,16 +84,15 @@ export const MainRootPresentational = ({
         </Show>
 
         <Show when={targetMonthlyIncomeData.length > 0 || targetMonthlyExpenseData.length > 0}>
-          {/* templateColumns="1fr auto 1fr"：左余白・中身・右余白の3列構成を作る */}
-          <Grid templateColumns='1fr auto 1fr' pt={10}>
-            <Box justifySelf='start'>
+          <Flex pt={10} align='center'>
+            <Flex flex='1'>
               <BalanceTotalCard
                 targetDate={targetDate}
                 targetMonthlyTotalAmount={targetMonthlyTotalAmount}
               />
-            </Box>
+            </Flex>
 
-            <HStack>
+            <Box>
               <MonthPickerCard
                 targetDate={targetDate}
                 onSubmitTargetDate={onSubmitTargetDate}
@@ -103,18 +100,19 @@ export const MainRootPresentational = ({
                 onViewPrevYear={onViewPrevYear}
                 onViewNextYear={onViewNextYear}
               />
-            </HStack>
-            <Box justifySelf='end' alignSelf='center'>
+            </Box>
+
+            <Flex flex='1' justify='flex-end' align='center'>
               <CreateDialogCard
                 handleCreateMoneyFlow={handleCreateMoneyFlow}
                 onCheckedChange={onCheckedChange}
                 isIncome={isIncome}
                 isDialogOpen={isDialogOpen}
                 onDialogOpenChange={onDialogOpenChange}
-                jumpToMonthByOccurredDate={jumpToMonthByOccurredDate}
+                onSubmitTargetDate={onSubmitTargetDate}
               />
-            </Box>
-          </Grid>
+            </Flex>
+          </Flex>
         </Show>
 
         {/* targetMonthlyData.some(...) :条件に当てはまる要素が1つでもあるかを調べる関数 */}
