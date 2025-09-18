@@ -22,6 +22,6 @@ export const formatMonthly = (targetDate: Date): string => {
 export const formatDateJa = (yyyyMmDd: string) => {
   const [y, m, d] = yyyyMmDd.split('-')
   const mm = String(Number(m)) // 09 → 9
-  const dd = String(Number(d)) // 08→ 8
+  const dd = String(Number(d)) // 08 → 8
   return `${y}年${mm}月${dd}日`
 }
