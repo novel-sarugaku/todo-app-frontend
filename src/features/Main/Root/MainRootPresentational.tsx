@@ -7,6 +7,7 @@ import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlo
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
 import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
 import { type moneyFlowData } from './types/moneyFlowData'
+import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
 interface MainRootPresentationalProps {
@@ -20,6 +21,14 @@ interface MainRootPresentationalProps {
   onViewPrevYear: () => void
   onViewNextYear: () => void
   targetMonthlyTotalAmount: number
+  handleUpdateMoneyFlow: (request: UpdateMoneyFlowRequest) => void
+  onCheckedChangeForUpdate: (checked: { checked: boolean }) => void
+  isIncomeForUpdate: boolean
+  isUpdateDialogOpen: boolean
+  onUpdateDialogOpenChange: (open: boolean) => void
+  upDateId: number | null
+  onClickUpdateDialog: (id: number) => void
+  onCloseUpdateDialog: () => void
   handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
   onCheckedChange: (checked: { checked: boolean }) => void
   isIncome: boolean
@@ -38,6 +47,14 @@ export const MainRootPresentational = ({
   onViewPrevYear,
   onViewNextYear,
   targetMonthlyTotalAmount,
+  handleUpdateMoneyFlow,
+  onCheckedChangeForUpdate,
+  isIncomeForUpdate,
+  isUpdateDialogOpen,
+  onUpdateDialogOpenChange,
+  upDateId,
+  onClickUpdateDialog,
+  onCloseUpdateDialog,
   handleCreateMoneyFlow,
   onCheckedChange,
   isIncome,
@@ -49,6 +66,7 @@ export const MainRootPresentational = ({
       <Header />
 
       <Container>
+        <Toaster />
         <Toaster />
         <Show when={targetMonthlyIncomeData.length === 0 && targetMonthlyExpenseData.length === 0}>
           <Flex pt={10}>
@@ -119,18 +137,36 @@ export const MainRootPresentational = ({
         <Show when={targetMonthlyIncomeData.length > 0}>
           <Box py={10}>
             <MoneyFlowDetailTableCard
+              onSubmitTargetDate={onSubmitTargetDate}
               items={targetMonthlyIncomeData}
               totalAmount={targetMonthlyIncomeTotalAmount}
               kindFlag={'income'}
+              handleUpdateMoneyFlow={handleUpdateMoneyFlow}
+              onCheckedChangeForUpdate={onCheckedChangeForUpdate}
+              isIncomeForUpdate={isIncomeForUpdate}
+              isUpdateDialogOpen={isUpdateDialogOpen}
+              onUpdateDialogOpenChange={onUpdateDialogOpenChange}
+              upDateId={upDateId}
+              onClickUpdateDialog={onClickUpdateDialog}
+              onCloseUpdateDialog={onCloseUpdateDialog}
             />
           </Box>
         </Show>
         <Show when={targetMonthlyExpenseData.length > 0}>
           <Box py={10}>
             <MoneyFlowDetailTableCard
+              onSubmitTargetDate={onSubmitTargetDate}
               items={targetMonthlyExpenseData}
               totalAmount={targetMonthlyExpenseTotalAmount}
               kindFlag={'expense'}
+              handleUpdateMoneyFlow={handleUpdateMoneyFlow}
+              onCheckedChangeForUpdate={onCheckedChangeForUpdate}
+              isIncomeForUpdate={isIncomeForUpdate}
+              isUpdateDialogOpen={isUpdateDialogOpen}
+              onUpdateDialogOpenChange={onUpdateDialogOpenChange}
+              upDateId={upDateId}
+              onClickUpdateDialog={onClickUpdateDialog}
+              onCloseUpdateDialog={onCloseUpdateDialog}
             />
           </Box>
         </Show>

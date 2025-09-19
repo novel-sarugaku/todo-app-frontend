@@ -1,19 +1,16 @@
 import { describe, it, expect, vi } from 'vitest'
 
 import * as client from '../client'
-import { getMoneyFlows, createMoneyFlow } from '../moneyFlows'
-import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
+import { getMoneyFlows, createMoneyFlow, updateMoneyFlow } from '../moneyFlows'
+import {
+  type CreateMoneyFlowRequest,
+  type UpdateMoneyFlowRequest,
+} from '@/models/api/internal/backend/v1/request/moneyFlows'
 import {
   type GetMoneyFlowsResponse,
   type CreateMoneyFlowResponse,
+  type UpdateMoneyFlowResponse,
 } from '@/models/api/internal/backend/v1/response/moneyFlows'
-
-const mockCreateMoneyFlowRequest: CreateMoneyFlowRequest = {
-  title: 'mockTitle',
-  amount: 200,
-  occurred_date: '2025-01-01T00:00:00.000Z',
-  kind: 'income',
-}
 
 const mockGetMoneyFlowsResponse: GetMoneyFlowsResponse = [
   {
@@ -25,8 +22,31 @@ const mockGetMoneyFlowsResponse: GetMoneyFlowsResponse = [
   },
 ]
 
+const mockCreateMoneyFlowRequest: CreateMoneyFlowRequest = {
+  title: 'mockTitle',
+  amount: 200,
+  occurred_date: '2025-01-01T00:00:00.000Z',
+  kind: 'income',
+}
+
 const mockCreateMoneyFlowResponse: CreateMoneyFlowResponse = {
   id: 2,
+  title: 'mockTitle',
+  amount: 200,
+  occurred_date: '2025-01-01T00:00:00.000Z',
+  kind: 'income',
+}
+
+const mockUpdateMoneyFlowRequest: UpdateMoneyFlowRequest = {
+  id: 1,
+  title: 'mockTitle',
+  amount: 200,
+  occurred_date: '2025-01-01T00:00:00.000Z',
+  kind: 'income',
+}
+
+const mockUpdateMoneyFlowResponse: UpdateMoneyFlowResponse = {
+  id: 1,
   title: 'mockTitle',
   amount: 200,
   occurred_date: '2025-01-01T00:00:00.000Z',
@@ -63,37 +83,70 @@ describe('getMoneyFlows', () => {
       expect(clientGetSpy).toHaveBeenCalled()
     })
   })
-})
 
-// 登録
-describe('createMoneyFlow', () => {
-  describe('正常系', () => {
-    it('正しいURL/ボディでPOSTし、dataを返す', async () => {
-      const clientCreateSpy = vi
-        .spyOn(client.internalBackendV1Client, 'post')
-        .mockResolvedValue({ data: mockCreateMoneyFlowResponse })
+  // 登録
+  describe('createMoneyFlow', () => {
+    describe('正常系', () => {
+      it('正しいURL/ボディでPOSTし、dataを返す', async () => {
+        const clientCreateSpy = vi
+          .spyOn(client.internalBackendV1Client, 'post')
+          .mockResolvedValue({ data: mockCreateMoneyFlowResponse })
 
-      const result = await createMoneyFlow(mockCreateMoneyFlowRequest)
+        const result = await createMoneyFlow(mockCreateMoneyFlowRequest)
 
-      expect(result).toBe(mockCreateMoneyFlowResponse)
-      expect(clientCreateSpy).toHaveBeenCalled()
+        expect(result).toBe(mockCreateMoneyFlowResponse)
+        expect(clientCreateSpy).toHaveBeenCalled()
 
-      const [[url, body]] = clientCreateSpy.mock.calls
+        const [[url, body]] = clientCreateSpy.mock.calls
 
-      expect(url).toBe('/money_flows')
-      expect(body).toBe(mockCreateMoneyFlowRequest)
+        expect(url).toBe('/money_flows')
+        expect(body).toBe(mockCreateMoneyFlowRequest)
+      })
+    })
+
+    describe('異常系', () => {
+      it('呼び出しが失敗した場合、エラーを返す', async () => {
+        const mockError = new Error('データの登録に失敗しました')
+        const clientCreateSpy = vi
+          .spyOn(client.internalBackendV1Client, 'post')
+          .mockRejectedValue(mockError)
+
+        await expect(createMoneyFlow(mockCreateMoneyFlowRequest)).rejects.toThrow(mockError)
+        expect(clientCreateSpy).toHaveBeenCalled()
+      })
     })
   })
 
-  describe('異常系', () => {
-    it('呼び出しが失敗した場合、エラーを返す', async () => {
-      const mockError = new Error('データの登録に失敗しました')
-      const clientCreateSpy = vi
-        .spyOn(client.internalBackendV1Client, 'post')
-        .mockRejectedValue(mockError)
+  // 更新
+  describe('updateMoneyFlow', () => {
+    describe('正常系', () => {
+      it('正しいURL/ボディでPUTし、dataを返す', async () => {
+        const clientCreateSpy = vi
+          .spyOn(client.internalBackendV1Client, 'put')
+          .mockResolvedValue({ data: mockUpdateMoneyFlowResponse })
 
-      await expect(createMoneyFlow(mockCreateMoneyFlowRequest)).rejects.toThrow(mockError)
-      expect(clientCreateSpy).toHaveBeenCalled()
+        const result = await updateMoneyFlow(mockUpdateMoneyFlowRequest)
+
+        expect(result).toBe(mockUpdateMoneyFlowResponse)
+        expect(clientCreateSpy).toHaveBeenCalled()
+
+        const [[url, body]] = clientCreateSpy.mock.calls
+
+        expect(url).toBe('/money_flows')
+        expect(body).toBe(mockUpdateMoneyFlowRequest)
+      })
+    })
+
+    describe('異常系', () => {
+      it('呼び出しが失敗した場合、エラーを返す', async () => {
+        const mockError = new Error('データの編集に失敗しました')
+        const clientCreateSpy = vi
+          .spyOn(client.internalBackendV1Client, 'put')
+          .mockRejectedValue(mockError)
+
+        await expect(updateMoneyFlow(mockUpdateMoneyFlowRequest)).rejects.toThrow(mockError)
+        expect(clientCreateSpy).toHaveBeenCalled()
+      })
     })
   })
 })

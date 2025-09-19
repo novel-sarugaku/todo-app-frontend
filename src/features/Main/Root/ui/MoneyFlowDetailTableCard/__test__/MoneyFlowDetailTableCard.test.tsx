@@ -1,11 +1,13 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { screen, within } from '@testing-library/react'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { MoneyFlowDetailTableCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
+import * as UpdateDialogCard from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/UpdateDialogCard/UpdateDialogCard'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'
 
+const mockOnSubmitTargetDate = vi.fn()
 const mockTitle1 = 'mockTitle1'
 const mockTitle2 = 'mockTitle2'
 const mockOccurredDate1 = new Date('2025-09-02T12:00:00Z')
@@ -29,11 +31,47 @@ const mockData: moneyFlowData[] = [
 ]
 const mockTotalAmount = 50200000
 const mockKindFlag = 'income' as Kind
+const mockHandleUpdateMoneyFlow = vi.fn()
+const mockOnCheckedChangeForUpdate = vi.fn()
+const mockIsIncomeForUpdate = false
+const mockIsUpdateDialogOpen = false
+const mockOnUpdateDialogOpenChange = vi.fn()
+const mockUpDateId = 1
+const mockOnClickUpdateDialog = vi.fn()
+const mockOnCloseUpdateDialog = vi.fn()
 const defaultProps = {
+  onSubmitTargetDate: mockOnSubmitTargetDate,
   items: mockData,
   totalAmount: mockTotalAmount,
   kindFlag: mockKindFlag,
+  handleUpdateMoneyFlow: mockHandleUpdateMoneyFlow,
+  onCheckedChangeForUpdate: mockOnCheckedChangeForUpdate,
+  isIncomeForUpdate: mockIsIncomeForUpdate,
+  isUpdateDialogOpen: mockIsUpdateDialogOpen,
+  onUpdateDialogOpenChange: mockOnUpdateDialogOpenChange,
+  upDateId: mockUpDateId,
+  onClickUpdateDialog: mockOnClickUpdateDialog,
+  onCloseUpdateDialog: mockOnCloseUpdateDialog,
 }
+
+const mockOnceData: moneyFlowData[] = [
+  {
+    id: 1,
+    title: mockTitle1,
+    amount: 1000000000,
+    occurred_date: mockOccurredDate1,
+    kind: mockKind,
+  },
+]
+const onceDataProps = {
+  ...defaultProps,
+  items: mockOnceData,
+}
+
+// Mocking the UpdateDialogCard component
+vi.spyOn(UpdateDialogCard, 'UpdateDialogCard').mockImplementation(() => {
+  return <div data-testid='mock-updateDialogCard'>Mocked UpdateDialogCard</div>
+})
 
 describe('ExpensesTableCard', () => {
   describe('正常系', () => {
@@ -65,6 +103,12 @@ describe('ExpensesTableCard', () => {
       expect(within(dataRows[1]).getByText('2025年9月5日')).toBeInTheDocument()
       expect(within(dataRows[1]).getByText(mockTitle2)).toBeInTheDocument()
       expect(within(dataRows[1]).getByText('1円')).toBeInTheDocument()
+    })
+
+    it('適切なpropsでUpdateDialogCardコンポーネントが表示される', () => {
+      customRender(<MoneyFlowDetailTableCard {...onceDataProps} />)
+
+      expect(screen.getByTestId('mock-updateDialogCard')).toBeInTheDocument()
     })
   })
 })
