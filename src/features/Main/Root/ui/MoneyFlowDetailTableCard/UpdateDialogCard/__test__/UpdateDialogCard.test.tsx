@@ -4,7 +4,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { toaster } from '@/share/lib/createToaster'
 
 import { customRender } from '@/tests/helpers/customRender'
-import { UpdateDialogCard } from '@/features/Main/Root/ui/UpdateDialogCard/UpdateDialogCard'
+import { UpdateDialogCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/UpdateDialogCard/UpdateDialogCard'
 import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 

@@ -1,7 +1,7 @@
 import { Box, Table } from '@chakra-ui/react'
 import { AiTwotoneDelete } from 'react-icons/ai'
 
-import { UpdateDialogCard } from '@/features/Main/Root/ui/UpdateDialogCard/UpdateDialogCard'
+import { UpdateDialogCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/UpdateDialogCard/UpdateDialogCard'
 import { formatMonthly, formatDate } from '@/share/utils/format/dateFormatters'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'

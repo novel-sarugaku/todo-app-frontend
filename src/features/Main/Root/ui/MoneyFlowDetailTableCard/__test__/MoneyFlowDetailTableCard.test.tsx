@@ -3,7 +3,7 @@ import { screen, within } from '@testing-library/react'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { MoneyFlowDetailTableCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
-import * as UpdateDialogCard from '@/features/Main/Root/ui/UpdateDialogCard/UpdateDialogCard'
+import * as UpdateDialogCard from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/UpdateDialogCard/UpdateDialogCard'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'
 
