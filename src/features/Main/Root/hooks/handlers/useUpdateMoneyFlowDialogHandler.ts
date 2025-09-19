@@ -4,7 +4,7 @@ import { useUpdateMoneyFlowMutation } from '../mutations/useUpdateMoneyFlowMutat
 import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type Kind } from '@/models/constants/kind'
 
-export const useUpdateMoneyFlowHandler = () => {
+export const useUpdateMoneyFlowDialogHandler = () => {
   const mutation = useUpdateMoneyFlowMutation()
 
   const [upDateId, setUpdateId] = useState<number | null>(null)

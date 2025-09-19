@@ -106,7 +106,7 @@ export const UpdateDialogCard = ({
         }}
       >
         <Dialog.Trigger asChild>
-          <CiMemoPad />
+          <CiMemoPad data-testid="update-dialog-trigger"/>
         </Dialog.Trigger>
 
         <Portal>
