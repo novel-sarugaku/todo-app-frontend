@@ -1,22 +1,41 @@
 import { Box, Table } from '@chakra-ui/react'
-import { CiMemoPad } from 'react-icons/ci'
 import { AiTwotoneDelete } from 'react-icons/ai'
 
+import { UpdateDialogCard } from '@/features/Main/Root/ui/UpdateDialogCard/UpdateDialogCard'
+import { formatMonthly, formatDate } from '@/share/utils/format/dateFormatters'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'
-import { formatMonthly, formatDate } from '@/share/utils/format/dateFormatters'
+import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
-interface MainRootPresentationalProps {
+interface MoneyFlowDetailTableCardProps {
+  onSubmitTargetDate: (year: number, monthIndex0to11: number) => void
   items: moneyFlowData[]
   totalAmount: number
   kindFlag: Kind
+  handleUpdateMoneyFlow: (request: UpdateMoneyFlowRequest) => void
+  onCheckedChangeForUpdate: (checked: { checked: boolean }) => void
+  isIncomeForUpdate: boolean
+  isUpdateDialogOpen: boolean
+  onUpdateDialogOpenChange: (open: boolean) => void
+  upDateId: number | null
+  onClickUpdateDialog: (id: number) => void
+  onCloseUpdateDialog: () => void
 }
 
 export const MoneyFlowDetailTableCard = ({
+  onSubmitTargetDate,
   items,
   totalAmount,
   kindFlag,
-}: MainRootPresentationalProps) => {
+  handleUpdateMoneyFlow,
+  onCheckedChangeForUpdate,
+  isIncomeForUpdate,
+  isUpdateDialogOpen,
+  onUpdateDialogOpenChange,
+  upDateId,
+  onClickUpdateDialog,
+  onCloseUpdateDialog,
+}: MoneyFlowDetailTableCardProps) => {
   const kindJa = {
     income: '収入',
     expense: '支出',
@@ -102,7 +121,18 @@ export const MoneyFlowDetailTableCard = ({
                 <BodyCell>{item.amount.toLocaleString('ja-JP')}円</BodyCell>
                 <BodyCell>
                   <Box display={'flex'} justifyContent={'center'}>
-                    <CiMemoPad />
+                    <UpdateDialogCard
+                      item={item}
+                      onSubmitTargetDate={onSubmitTargetDate}
+                      handleUpdateMoneyFlow={handleUpdateMoneyFlow}
+                      onCheckedChangeForUpdate={onCheckedChangeForUpdate}
+                      isIncomeForUpdate={isIncomeForUpdate}
+                      isUpdateDialogOpen={isUpdateDialogOpen}
+                      onUpdateDialogOpenChange={onUpdateDialogOpenChange}
+                      upDateId={upDateId}
+                      onClickUpdateDialog={onClickUpdateDialog}
+                      onCloseUpdateDialog={onCloseUpdateDialog}
+                    />
                   </Box>
                 </BodyCell>
                 <BodyCell>
