@@ -1,7 +1,7 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest'
 import { act } from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-import { toaster } from '@/components/ui/toaster'
+import { toaster } from '@/share/lib/createToaster'
 
 import { customRender } from '@/tests/helpers/customRender'
 import { UpdateDialogCard } from '@/features/Main/Root/ui/UpdateDialogCard/UpdateDialogCard'
@@ -85,7 +85,7 @@ const mockfailingProps = {
 
 // Mocking the toaster
 const mockToasterCreate = toaster.create
-vi.mock('@/components/ui/toaster', () => ({
+vi.mock('@/share/lib/createToaster', () => ({
   toaster: { create: vi.fn() },
 }))
 
@@ -121,7 +121,7 @@ describe('UpdateDialogCard', () => {
       expect(screen.getByLabelText('金額')).toHaveValue(4200)
     })
 
-    it('編集アイコンをクリックするとonUpdateDialogOpenChange(true)が呼ばれる', async () => {
+    it('編集アイコンをクリックするとonOpenChange内の関数が正しく発火する', async () => {
       customRender(<UpdateDialogCard {...defaultProps} />)
 
       act(() => {
@@ -131,6 +131,10 @@ describe('UpdateDialogCard', () => {
       await waitFor(() => {
         expect(mockOnUpdateDialogOpenChange).toHaveBeenCalledTimes(1)
         expect(mockOnUpdateDialogOpenChange).toHaveBeenCalledWith(true)
+        expect(mockOnClickUpdateDialog).toHaveBeenCalledTimes(1)
+        expect(mockOnClickUpdateDialog).toHaveBeenCalledWith(1)
+        expect(mockOnCheckedChangeForUpdate).toHaveBeenCalledTimes(1)
+        expect(mockOnCheckedChangeForUpdate).toHaveBeenCalledWith({ checked: false })
       })
     })
 

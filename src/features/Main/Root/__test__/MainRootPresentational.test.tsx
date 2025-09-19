@@ -40,7 +40,14 @@ const mockOnCheckedChange = vi.fn()
 const mockIsIncome = false
 const mockIsDialogOpen = true
 const mockOnDialogOpenChange = vi.fn()
-const mockJumpToMonthByOccurredDate = vi.fn()
+const mockHandleUpdateMoneyFlow = vi.fn()
+const mockOnCheckedChangeForUpdate = vi.fn()
+const mockIsIncomeForUpdate = false
+const mockIsUpdateDialogOpen = true
+const mockOnUpdateDialogOpenChange = vi.fn()
+const mockUpDateId = 1
+const mockOnClickUpdateDialog = vi.fn()
+const mockOnCloseUpdateDialog = vi.fn()
 const defaultProps = {
   targetDate: mockTargetDate,
   targetMonthlyIncomeData: mockTargetMonthlyIncomeData,
@@ -57,7 +64,14 @@ const defaultProps = {
   isIncome: mockIsIncome,
   isDialogOpen: mockIsDialogOpen,
   onDialogOpenChange: mockOnDialogOpenChange,
-  jumpToMonthByOccurredDate: mockJumpToMonthByOccurredDate,
+  handleUpdateMoneyFlow: mockHandleUpdateMoneyFlow,
+  onCheckedChangeForUpdate: mockOnCheckedChangeForUpdate,
+  isIncomeForUpdate: mockIsIncomeForUpdate,
+  isUpdateDialogOpen: mockIsUpdateDialogOpen,
+  onUpdateDialogOpenChange: mockOnUpdateDialogOpenChange,
+  upDateId: mockUpDateId,
+  onClickUpdateDialog: mockOnClickUpdateDialog,
+  onCloseUpdateDialog: mockOnCloseUpdateDialog,
 }
 const noDataInformation =
   /選択した年月は収入・支出ともに登録がありません。\s画面右上に表示されている「収支を登録する」ボタンから登録してください。\s登録後こちらに一覧が表示されます。/

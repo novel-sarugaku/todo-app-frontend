@@ -37,38 +37,58 @@ describe('useUpdateMoneyFlowDialogHandler', () => {
       expect(result.current.isUpdateDialogOpen).toBe(false)
     })
 
-    // it('onDialogOpenChangeがtrueのときはisDialogOpenがtrueになる、onDialogOpenChangeがfalseのときはisDialogOpenがfalseになる', () => {
-    //   const { result } = customRenderHook(() => useCreateMoneyFlowDialogHandler())
+    it('onUpdateDialogOpenChangeがtrueのときはisUpdateDialogOpenがtrueになる、onUpdateDialogOpenChangeがfalseのときはisUpdateDialogOpenがfalseになる', () => {
+      const { result } = customRenderHook(() => useUpdateMoneyFlowDialogHandler())
 
-    //   act(() => {
-    //     result.current.onDialogOpenChange(true)
-    //   })
+      act(() => {
+        result.current.onUpdateDialogOpenChange(true)
+      })
 
-    //   expect(result.current.isDialogOpen).toBe(true)
+      expect(result.current.isUpdateDialogOpen).toBe(true)
 
-    //   act(() => {
-    //     result.current.onDialogOpenChange(false)
-    //   })
+      act(() => {
+        result.current.onUpdateDialogOpenChange(false)
+      })
 
-    //   expect(result.current.isDialogOpen).toBe(false)
-    // })
+      expect(result.current.isUpdateDialogOpen).toBe(false)
+    })
 
-//     it('onCheckedChangeでchecked=trueのときisIncome=trueになり、checked=falseのときisIncome=falseになる', () => {
-//       const { result } = customRenderHook(() => useCreateMoneyFlowDialogHandler())
+    it('onUpdateDialogOpenChangeでchecked=trueのときisIncome=trueになり、checked=falseのときisIncome=falseになる', () => {
+      const { result } = customRenderHook(() => useUpdateMoneyFlowDialogHandler())
 
-//       expect(result.current.isIncome).toBe(false) // expense（初期値）
+      expect(result.current.isIncomeForUpdate).toBe(false) // expense（初期値）
 
-//       act(() => {
-//         result.current.onCheckedChange({ checked: true }) // incomeに切り替え
-//       })
+      act(() => {
+        result.current.onCheckedChangeForUpdate({ checked: true }) // incomeに切り替え
+      })
 
-//       expect(result.current.isIncome).toBe(true) // income
+      expect(result.current.isIncomeForUpdate).toBe(true) // income
 
-//       act(() => {
-//         result.current.onCheckedChange({ checked: false }) // expenseに切り替え
-//       })
+      act(() => {
+        result.current.onCheckedChangeForUpdate({ checked: false }) // expenseに切り替え
+      })
 
-//       expect(result.current.isIncome).toBe(false) // expense
-//     })
+      expect(result.current.isIncomeForUpdate).toBe(false) // expense
+    })
+
+    it('onClickUpdateDialogを発火させたときにsetUpdateIdに正しくid(number)が渡される', () => {
+      const { result } = customRenderHook(() => useUpdateMoneyFlowDialogHandler())
+
+      act(() => {
+        result.current.onClickUpdateDialog(1)
+      })
+
+      expect(result.current.upDateId).toBe(1)
+    })
+
+    it('onCloseUpdateDialogを発火させたときにsetUpdateIdに正しくnullが渡される', () => {
+      const { result } = customRenderHook(() => useUpdateMoneyFlowDialogHandler())
+
+      act(() => {
+        result.current.onCloseUpdateDialog()
+      })
+
+      expect(result.current.upDateId).toBe(null)
+    })
   })
 })

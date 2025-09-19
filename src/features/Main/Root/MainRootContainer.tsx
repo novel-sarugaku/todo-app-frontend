@@ -1,8 +1,8 @@
 import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentational'
 import { useMoneyFlowsHandler } from './hooks/handlers/useMoneyFlowsHandler'
 import { useViewYearHandler } from './hooks/handlers/useViewYearHandler'
-import { useUpdateMoneyFlowDialogHandler } from './hooks/handlers/useUpdateMoneyFlowDialogHandler'
 import { useCreateMoneyFlowDialogHandler } from './hooks/handlers/useCreateMoneyFlowDialogHandler'
+import { useUpdateMoneyFlowDialogHandler } from './hooks/handlers/useUpdateMoneyFlowDialogHandler'
 
 export const MainRootContainer = () => {
   const {
@@ -40,6 +40,11 @@ export const MainRootContainer = () => {
       onViewPrevYear={onViewPrevYear}
       onViewNextYear={onViewNextYear}
       targetMonthlyTotalAmount={targetMonthlyTotalAmount}
+      handleCreateMoneyFlow={handleCreateMoneyFlow}
+      onCheckedChange={onCheckedChange}
+      isIncome={isIncome}
+      isDialogOpen={isDialogOpen}
+      onDialogOpenChange={onDialogOpenChange}
       handleUpdateMoneyFlow={handleUpdateMoneyFlow}
       onCheckedChangeForUpdate={onCheckedChangeForUpdate}
       isIncomeForUpdate={isIncomeForUpdate}
@@ -48,11 +53,6 @@ export const MainRootContainer = () => {
       upDateId={upDateId}
       onClickUpdateDialog={onClickUpdateDialog}
       onCloseUpdateDialog={onCloseUpdateDialog}
-      handleCreateMoneyFlow={handleCreateMoneyFlow}
-      onCheckedChange={onCheckedChange}
-      isIncome={isIncome}
-      isDialogOpen={isDialogOpen}
-      onDialogOpenChange={onDialogOpenChange}
     />
   )
 }

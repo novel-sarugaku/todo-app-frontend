@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { CiMemoPad } from 'react-icons/ci'
 
-import { toaster } from '@/components/ui/toaster'
+import { toaster } from '@/share/lib/createToaster'
 import { formatDate, formatDateLocal } from '@/share/utils/format/dateFormatters'
 import { kindToJa } from '@/share/utils/format/labelFormatters'
 import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
@@ -106,7 +106,7 @@ export const UpdateDialogCard = ({
         }}
       >
         <Dialog.Trigger asChild>
-          <CiMemoPad data-testid="update-dialog-trigger"/>
+          <CiMemoPad data-testid='update-dialog-trigger' />
         </Dialog.Trigger>
 
         <Portal>

@@ -7,6 +7,7 @@ import * as Presentational from '@/features/Main/Root/MainRootPresentational'
 import * as moneyFlowsHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowsHandler'
 import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
 import * as CreateMoneyFlowDialogHandler from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowDialogHandler'
+import * as UpdateMoneyFlowDialogHandler from '@/features/Main/Root/hooks/handlers/useUpdateMoneyFlowDialogHandler'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
@@ -69,6 +70,26 @@ vi.spyOn(CreateMoneyFlowDialogHandler, 'useCreateMoneyFlowDialogHandler').mockRe
   onDialogOpenChange: mockOnDialogOpenChange,
 })
 
+// Mocking the.  useUpdateMoneyFlowDialogHandle hook
+const mockHandleUpdateMoneyFlow = vi.fn()
+const mockOnCheckedChangeForUpdate = vi.fn()
+const mockIsIncomeForUpdate = false
+const mockIsUpdateDialogOpen = true
+const mockOnUpdateDialogOpenChange = vi.fn()
+const mockUpDateId = 1
+const mockOnClickUpdateDialog = vi.fn()
+const mockOnCloseUpdateDialog = vi.fn()
+vi.spyOn(UpdateMoneyFlowDialogHandler, 'useUpdateMoneyFlowDialogHandler').mockReturnValue({
+  handleUpdateMoneyFlow: mockHandleUpdateMoneyFlow,
+  onCheckedChangeForUpdate: mockOnCheckedChangeForUpdate,
+  isIncomeForUpdate: mockIsIncomeForUpdate,
+  isUpdateDialogOpen: mockIsUpdateDialogOpen,
+  onUpdateDialogOpenChange: mockOnUpdateDialogOpenChange,
+  upDateId: mockUpDateId,
+  onClickUpdateDialog: mockOnClickUpdateDialog,
+  onCloseUpdateDialog: mockOnCloseUpdateDialog,
+})
+
 describe('MainRootContainer', () => {
   describe('正常系', () => {
     it('MainRootPresentationalに正しいpropsが渡される', () => {
@@ -93,6 +114,14 @@ describe('MainRootContainer', () => {
           isIncome: mockIsIncome,
           isDialogOpen: mockIsDialogOpen,
           onDialogOpenChange: mockOnDialogOpenChange,
+          handleUpdateMoneyFlow: mockHandleUpdateMoneyFlow,
+          onCheckedChangeForUpdate: mockOnCheckedChangeForUpdate,
+          isIncomeForUpdate: mockIsIncomeForUpdate,
+          isUpdateDialogOpen: mockIsUpdateDialogOpen,
+          onUpdateDialogOpenChange: mockOnUpdateDialogOpenChange,
+          upDateId: mockUpDateId,
+          onClickUpdateDialog: mockOnClickUpdateDialog,
+          onCloseUpdateDialog: mockOnCloseUpdateDialog,
         }),
       )
     })
