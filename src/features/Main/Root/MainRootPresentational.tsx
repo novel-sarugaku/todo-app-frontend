@@ -1,10 +1,13 @@
-import { Container, Show, Box, Text, HStack, Grid } from '@chakra-ui/react'
+import { Container, Show, Box, Text, Flex, Spacer } from '@chakra-ui/react'
+import { Toaster } from '@/components/atoms/toaster'
 
 import { Header } from '@/components/organisms/Header'
 import { BalanceTotalCard } from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
 import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
+import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
 import { type moneyFlowData } from './types/moneyFlowData'
+import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
 interface MainRootPresentationalProps {
   targetDate: Date
@@ -17,6 +20,11 @@ interface MainRootPresentationalProps {
   onViewPrevYear: () => void
   onViewNextYear: () => void
   targetMonthlyTotalAmount: number
+  handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
+  onCheckedChange: (checked: { checked: boolean }) => void
+  isIncome: boolean
+  isDialogOpen: boolean
+  onDialogOpenChange: (open: boolean) => void
 }
 
 export const MainRootPresentational = ({
@@ -30,13 +38,22 @@ export const MainRootPresentational = ({
   onViewPrevYear,
   onViewNextYear,
   targetMonthlyTotalAmount,
+  handleCreateMoneyFlow,
+  onCheckedChange,
+  isIncome,
+  isDialogOpen,
+  onDialogOpenChange,
 }: MainRootPresentationalProps) => {
   return (
     <>
       <Header />
+
       <Container>
+        <Toaster />
         <Show when={targetMonthlyIncomeData.length === 0 && targetMonthlyExpenseData.length === 0}>
-          <Box justifySelf='center' pt={14}>
+          <Flex pt={10}>
+            <Spacer />
+
             <MonthPickerCard
               targetDate={targetDate}
               onSubmitTargetDate={onSubmitTargetDate}
@@ -44,7 +61,18 @@ export const MainRootPresentational = ({
               onViewPrevYear={onViewPrevYear}
               onViewNextYear={onViewNextYear}
             />
-          </Box>
+
+            <Flex flex='1' justify='flex-end'>
+              <CreateDialogCard
+                handleCreateMoneyFlow={handleCreateMoneyFlow}
+                onCheckedChange={onCheckedChange}
+                isIncome={isIncome}
+                isDialogOpen={isDialogOpen}
+                onDialogOpenChange={onDialogOpenChange}
+                onSubmitTargetDate={onSubmitTargetDate}
+              />
+            </Flex>
+          </Flex>
 
           <Box mt={'150px'} p={4} bg={'blue.100'} borderRadius={'2xl'} border={'1px solid'}>
             <Text whiteSpace={'pre-line'}>
@@ -56,16 +84,15 @@ export const MainRootPresentational = ({
         </Show>
 
         <Show when={targetMonthlyIncomeData.length > 0 || targetMonthlyExpenseData.length > 0}>
-          {/* templateColumns="1fr auto 1fr"：左余白・中身・右余白の3列構成を作る */}
-          <Grid templateColumns='1fr auto 1fr' pt={10}>
-            <Box justifySelf='start'>
+          <Flex pt={10} align='center'>
+            <Flex flex='1'>
               <BalanceTotalCard
                 targetDate={targetDate}
                 targetMonthlyTotalAmount={targetMonthlyTotalAmount}
               />
-            </Box>
+            </Flex>
 
-            <HStack>
+            <Box>
               <MonthPickerCard
                 targetDate={targetDate}
                 onSubmitTargetDate={onSubmitTargetDate}
@@ -73,8 +100,19 @@ export const MainRootPresentational = ({
                 onViewPrevYear={onViewPrevYear}
                 onViewNextYear={onViewNextYear}
               />
-            </HStack>
-          </Grid>
+            </Box>
+
+            <Flex flex='1' justify='flex-end' align='center'>
+              <CreateDialogCard
+                handleCreateMoneyFlow={handleCreateMoneyFlow}
+                onCheckedChange={onCheckedChange}
+                isIncome={isIncome}
+                isDialogOpen={isDialogOpen}
+                onDialogOpenChange={onDialogOpenChange}
+                onSubmitTargetDate={onSubmitTargetDate}
+              />
+            </Flex>
+          </Flex>
         </Show>
 
         {/* targetMonthlyData.some(...) :条件に当てはまる要素が1つでもあるかを調べる関数 */}
