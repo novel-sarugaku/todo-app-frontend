@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from 'react'
 
 import { customRenderHook } from '@/tests/helpers/customRenderHook'
@@ -39,6 +39,13 @@ const useGetMoneyFlowsQuerySpy = vi
   .mockReturnValue({
     data: mockData,
   } as UseQueryResult<moneyFlowData[]>)
+
+beforeEach(() => {
+  vi.clearAllMocks()
+  useGetMoneyFlowsQuerySpy.mockReturnValue({
+    data: mockData,
+  } as UseQueryResult<moneyFlowData[]>)
+})
 
 describe('useMoneyFlowsHandler', () => {
   describe('正常系', () => {

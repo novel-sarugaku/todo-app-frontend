@@ -6,6 +6,7 @@ import { MainRootContainer } from '@/features/Main/Root/MainRootContainer'
 import * as Presentational from '@/features/Main/Root/MainRootPresentational'
 import * as moneyFlowsHandler from '@/features/Main/Root/hooks/handlers/useMoneyFlowsHandler'
 import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
+import * as CreateMoneyFlowDialogHandler from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowDialogHandler'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
@@ -54,6 +55,20 @@ vi.spyOn(viewYearHandler, 'useViewYearHandler').mockReturnValue({
   onViewNextYear: mockOnViewNextYear,
 })
 
+// Mocking the useCreateMoneyFlowHandler hook
+const mockHandleCreateMoneyFlow = vi.fn()
+const mockOnCheckedChange = vi.fn()
+const mockIsIncome = false
+const mockIsDialogOpen = true
+const mockOnDialogOpenChange = vi.fn()
+vi.spyOn(CreateMoneyFlowDialogHandler, 'useCreateMoneyFlowDialogHandler').mockReturnValue({
+  handleCreateMoneyFlow: mockHandleCreateMoneyFlow,
+  onCheckedChange: mockOnCheckedChange,
+  isIncome: mockIsIncome,
+  isDialogOpen: mockIsDialogOpen,
+  onDialogOpenChange: mockOnDialogOpenChange,
+})
+
 describe('MainRootContainer', () => {
   describe('正常系', () => {
     it('MainRootPresentationalに正しいpropsが渡される', () => {
@@ -73,6 +88,11 @@ describe('MainRootContainer', () => {
           onViewPrevYear: mockOnViewPrevYea,
           onViewNextYear: mockOnViewNextYear,
           targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
+          handleCreateMoneyFlow: mockHandleCreateMoneyFlow,
+          onCheckedChange: mockOnCheckedChange,
+          isIncome: mockIsIncome,
+          isDialogOpen: mockIsDialogOpen,
+          onDialogOpenChange: mockOnDialogOpenChange,
         }),
       )
     })

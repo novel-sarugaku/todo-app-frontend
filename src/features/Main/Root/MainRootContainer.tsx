@@ -2,6 +2,7 @@ import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentatio
 import { useMoneyFlowsHandler } from './hooks/handlers/useMoneyFlowsHandler'
 import { useViewYearHandler } from './hooks/handlers/useViewYearHandler'
 import { useUpdateMoneyFlowDialogHandler } from './hooks/handlers/useUpdateMoneyFlowDialogHandler'
+import { useCreateMoneyFlowDialogHandler } from './hooks/handlers/useCreateMoneyFlowDialogHandler'
 
 export const MainRootContainer = () => {
   const {
@@ -24,6 +25,8 @@ export const MainRootContainer = () => {
     onClickUpdateDialog,
     onCloseUpdateDialog,
   } = useUpdateMoneyFlowDialogHandler()
+  const { handleCreateMoneyFlow, onCheckedChange, isIncome, isDialogOpen, onDialogOpenChange } =
+    useCreateMoneyFlowDialogHandler()
 
   return (
     <MainRootPresentational
@@ -45,6 +48,11 @@ export const MainRootContainer = () => {
       upDateId={upDateId}
       onClickUpdateDialog={onClickUpdateDialog}
       onCloseUpdateDialog={onCloseUpdateDialog}
+      handleCreateMoneyFlow={handleCreateMoneyFlow}
+      onCheckedChange={onCheckedChange}
+      isIncome={isIncome}
+      isDialogOpen={isDialogOpen}
+      onDialogOpenChange={onDialogOpenChange}
     />
   )
 }

@@ -5,7 +5,8 @@ import { customRender } from '@/tests/helpers/customRender'
 import { MainRootPresentational } from '@/features/Main/Root/MainRootPresentational'
 import * as BalanceTotalCard from '@/features/Main/Root/ui/BalanceTotalCard/BalanceTotalCard'
 import * as MoneyFlowDetailTableCard from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
-import * as MonthPicker from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
+import * as MonthPickerCard from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
+import * as CreateDialogCard from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 const mockTargetDate = new Date('2025-09-01T12:00:00Z')
@@ -34,6 +35,12 @@ const mockViewYear = 2025
 const mockOnViewPrevYear = vi.fn()
 const mockOnViewNextYear = vi.fn()
 const mockTargetMonthlyTotalAmount = 2500
+const mockHandleCreateMoneyFlow = vi.fn()
+const mockOnCheckedChange = vi.fn()
+const mockIsIncome = false
+const mockIsDialogOpen = true
+const mockOnDialogOpenChange = vi.fn()
+const mockJumpToMonthByOccurredDate = vi.fn()
 const defaultProps = {
   targetDate: mockTargetDate,
   targetMonthlyIncomeData: mockTargetMonthlyIncomeData,
@@ -45,6 +52,12 @@ const defaultProps = {
   onViewPrevYear: mockOnViewPrevYear,
   onViewNextYear: mockOnViewNextYear,
   targetMonthlyTotalAmount: mockTargetMonthlyTotalAmount,
+  handleCreateMoneyFlow: mockHandleCreateMoneyFlow,
+  onCheckedChange: mockOnCheckedChange,
+  isIncome: mockIsIncome,
+  isDialogOpen: mockIsDialogOpen,
+  onDialogOpenChange: mockOnDialogOpenChange,
+  jumpToMonthByOccurredDate: mockJumpToMonthByOccurredDate,
 }
 const noDataInformation =
   /選択した年月は収入・支出ともに登録がありません。\s画面右上に表示されている「収支を登録する」ボタンから登録してください。\s登録後こちらに一覧が表示されます。/
@@ -60,8 +73,13 @@ vi.spyOn(MoneyFlowDetailTableCard, 'MoneyFlowDetailTableCard').mockImplementatio
 })
 
 // Mocking the MonthPickerCard component
-vi.spyOn(MonthPicker, 'MonthPickerCard').mockImplementation(() => {
+vi.spyOn(MonthPickerCard, 'MonthPickerCard').mockImplementation(() => {
   return <div data-testid='mock-monthPickerCard'>Mocked MonthPickerCard</div>
+})
+
+// Mocking the CreateDialogCard component
+vi.spyOn(CreateDialogCard, 'CreateDialogCard').mockImplementation(() => {
+  return <div data-testid='mock-createDialogCard'>Mocked CreateDialogCard</div>
 })
 
 describe('MainRootPresentational', () => {
@@ -94,6 +112,12 @@ describe('MainRootPresentational', () => {
       customRender(<MainRootPresentational {...defaultProps} />)
 
       expect(screen.getByTestId('mock-monthPickerCard')).toBeInTheDocument()
+    })
+
+    it('適切なpropsでCreateDialogCardコンポーネントが表示される', () => {
+      customRender(<MainRootPresentational {...defaultProps} />)
+
+      expect(screen.getByTestId('mock-createDialogCard')).toBeInTheDocument()
     })
   })
 })
