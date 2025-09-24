@@ -1,10 +1,11 @@
 import { describe, it, expect, vi } from 'vitest'
 
 import * as client from '../client'
-import { getMoneyFlows, createMoneyFlow, updateMoneyFlow } from '../moneyFlows'
+import { getMoneyFlows, createMoneyFlow, updateMoneyFlow, deleteMoneyFlow } from '../moneyFlows'
 import {
   type CreateMoneyFlowRequest,
   type UpdateMoneyFlowRequest,
+  type DeleteMoneyFlowRequest,
 } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import {
   type GetMoneyFlowsResponse,
@@ -51,6 +52,10 @@ const mockUpdateMoneyFlowResponse: UpdateMoneyFlowResponse = {
   amount: 200,
   occurred_date: '2025-01-01T00:00:00.000Z',
   kind: 'income',
+}
+
+const mockDeleteMoneyFlowRequest: DeleteMoneyFlowRequest = {
+  id: 1,
 }
 
 // 全件取得
@@ -147,6 +152,36 @@ describe('getMoneyFlows', () => {
         await expect(updateMoneyFlow(mockUpdateMoneyFlowRequest)).rejects.toThrow(mockError)
         expect(clientCreateSpy).toHaveBeenCalled()
       })
+    })
+  })
+})
+
+// 削除
+describe('deleteMoneyFlow', () => {
+  describe('正常系', () => {
+    it('正しいURLでDELETEし、成功する', async () => {
+      const clientDeleteSpy = vi
+        .spyOn(client.internalBackendV1Client, 'delete')
+        .mockResolvedValue({})
+
+      await expect(deleteMoneyFlow(mockDeleteMoneyFlowRequest)).resolves.toBeUndefined()
+      expect(clientDeleteSpy).toHaveBeenCalled()
+
+      const [[url]] = clientDeleteSpy.mock.calls
+
+      expect(url).toBe('/money_flows')
+    })
+  })
+
+  describe('異常系', () => {
+    it('呼び出しが失敗した場合、エラーを返す', async () => {
+      const mockError = new Error('データの削除に失敗しました')
+      const clientDeleteSpy = vi
+        .spyOn(client.internalBackendV1Client, 'delete')
+        .mockRejectedValue(mockError)
+
+      await expect(deleteMoneyFlow(mockDeleteMoneyFlowRequest)).rejects.toThrow(mockError)
+      expect(clientDeleteSpy).toHaveBeenCalled()
     })
   })
 })

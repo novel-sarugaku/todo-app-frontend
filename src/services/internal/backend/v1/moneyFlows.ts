@@ -39,6 +39,6 @@ export const updateMoneyFlow = async (
 }
 
 // 削除
-export const deleteMoneyFlows = async (request: DeleteMoneyFlowRequest): Promise<void> => {
+export const deleteMoneyFlow = async (request: DeleteMoneyFlowRequest): Promise<void> => {
   await internalBackendV1Client.delete('/money_flows', { data: request })
 }
