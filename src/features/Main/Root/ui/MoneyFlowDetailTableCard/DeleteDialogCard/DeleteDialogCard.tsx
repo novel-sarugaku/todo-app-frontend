@@ -53,7 +53,7 @@ export const DeleteDialogCard = ({
         }}
       >
         <Dialog.Trigger asChild>
-          <AiTwotoneDelete data-testid='update-dialog-trigger' />
+          <AiTwotoneDelete data-testid='delete-dialog-trigger' />
         </Dialog.Trigger>
 
         <Portal>

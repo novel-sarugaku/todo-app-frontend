@@ -28,7 +28,14 @@ export const MainRootContainer = () => {
   } = useUpdateMoneyFlowDialogHandler()
   const { handleCreateMoneyFlow, onCheckedChange, isIncome, isDialogOpen, onDialogOpenChange } =
     useCreateMoneyFlowDialogHandler()
-  const { handleDeleteMoneyFlow, isDeleteDialogOpen, onDeleteDialogOpenChange, deleteId, onClickDeleteDialog, onCloseDeleteDialog } = useDeleteMoneyFlowDialogHandler()
+  const {
+    handleDeleteMoneyFlow,
+    isDeleteDialogOpen,
+    onDeleteDialogOpenChange,
+    deleteId,
+    onClickDeleteDialog,
+    onCloseDeleteDialog,
+  } = useDeleteMoneyFlowDialogHandler()
 
   return (
     <MainRootPresentational
