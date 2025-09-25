@@ -1,11 +1,12 @@
 import { Box, Table } from '@chakra-ui/react'
-import { AiTwotoneDelete } from 'react-icons/ai'
 
 import { UpdateDialogCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/UpdateDialogCard/UpdateDialogCard'
+import { DeleteDialogCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/DeleteDialogCard/DeleteDialogCard'
 import { formatMonthly, formatDate } from '@/share/utils/format/dateFormatters'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'
 import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
+import { type DeleteMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
 interface MoneyFlowDetailTableCardProps {
   onSubmitTargetDate: (year: number, monthIndex0to11: number) => void
@@ -20,6 +21,12 @@ interface MoneyFlowDetailTableCardProps {
   upDateId: number | null
   onClickUpdateDialog: (id: number) => void
   onCloseUpdateDialog: () => void
+  handleDeleteMoneyFlow: (request: DeleteMoneyFlowRequest) => void
+  isDeleteDialogOpen: boolean
+  onDeleteDialogOpenChange: (open: boolean) => void
+  deleteId: number | null
+  onClickDeleteDialog: (id: number) => void
+  onCloseDeleteDialog: () => void
 }
 
 export const MoneyFlowDetailTableCard = ({
@@ -35,6 +42,12 @@ export const MoneyFlowDetailTableCard = ({
   upDateId,
   onClickUpdateDialog,
   onCloseUpdateDialog,
+  handleDeleteMoneyFlow,
+  isDeleteDialogOpen,
+  onDeleteDialogOpenChange,
+  deleteId,
+  onClickDeleteDialog,
+  onCloseDeleteDialog,
 }: MoneyFlowDetailTableCardProps) => {
   const kindJa = {
     income: '収入',
@@ -137,7 +150,15 @@ export const MoneyFlowDetailTableCard = ({
                 </BodyCell>
                 <BodyCell>
                   <Box display={'flex'} justifyContent={'center'}>
-                    <AiTwotoneDelete />
+                    <DeleteDialogCard
+                      item={item}
+                      handleDeleteMoneyFlow={handleDeleteMoneyFlow}
+                      isDeleteDialogOpen={isDeleteDialogOpen}
+                      onDeleteDialogOpenChange={onDeleteDialogOpenChange}
+                      deleteId={deleteId}
+                      onClickDeleteDialog={onClickDeleteDialog}
+                      onCloseDeleteDialog={onCloseDeleteDialog}
+                    />
                   </Box>
                 </BodyCell>
               </Table.Row>

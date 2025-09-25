@@ -7,8 +7,9 @@ import { MoneyFlowDetailTableCard } from './ui/MoneyFlowDetailTableCard/MoneyFlo
 import { MonthPickerCard } from '@/features/Main/Root/ui/MonthPickerCard/MonthPickerCard'
 import { CreateDialogCard } from '@/features/Main/Root/ui/CreateDialogCard/CreateDialogCard'
 import { type moneyFlowData } from './types/moneyFlowData'
-import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 import { type CreateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
+import { type UpdateMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
+import { type DeleteMoneyFlowRequest } from '@/models/api/internal/backend/v1/request/moneyFlows'
 
 interface MainRootPresentationalProps {
   targetDate: Date
@@ -21,6 +22,11 @@ interface MainRootPresentationalProps {
   onViewPrevYear: () => void
   onViewNextYear: () => void
   targetMonthlyTotalAmount: number
+  handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
+  onCheckedChange: (checked: { checked: boolean }) => void
+  isIncome: boolean
+  isDialogOpen: boolean
+  onDialogOpenChange: (open: boolean) => void
   handleUpdateMoneyFlow: (request: UpdateMoneyFlowRequest) => void
   onCheckedChangeForUpdate: (checked: { checked: boolean }) => void
   isIncomeForUpdate: boolean
@@ -29,11 +35,12 @@ interface MainRootPresentationalProps {
   upDateId: number | null
   onClickUpdateDialog: (id: number) => void
   onCloseUpdateDialog: () => void
-  handleCreateMoneyFlow: (request: CreateMoneyFlowRequest) => void
-  onCheckedChange: (checked: { checked: boolean }) => void
-  isIncome: boolean
-  isDialogOpen: boolean
-  onDialogOpenChange: (open: boolean) => void
+  handleDeleteMoneyFlow: (request: DeleteMoneyFlowRequest) => void
+  isDeleteDialogOpen: boolean
+  onDeleteDialogOpenChange: (open: boolean) => void
+  deleteId: number | null
+  onClickDeleteDialog: (id: number) => void
+  onCloseDeleteDialog: () => void
 }
 
 export const MainRootPresentational = ({
@@ -47,6 +54,11 @@ export const MainRootPresentational = ({
   onViewPrevYear,
   onViewNextYear,
   targetMonthlyTotalAmount,
+  handleCreateMoneyFlow,
+  onCheckedChange,
+  isIncome,
+  isDialogOpen,
+  onDialogOpenChange,
   handleUpdateMoneyFlow,
   onCheckedChangeForUpdate,
   isIncomeForUpdate,
@@ -55,11 +67,12 @@ export const MainRootPresentational = ({
   upDateId,
   onClickUpdateDialog,
   onCloseUpdateDialog,
-  handleCreateMoneyFlow,
-  onCheckedChange,
-  isIncome,
-  isDialogOpen,
-  onDialogOpenChange,
+  handleDeleteMoneyFlow,
+  isDeleteDialogOpen,
+  onDeleteDialogOpenChange,
+  deleteId,
+  onClickDeleteDialog,
+  onCloseDeleteDialog,
 }: MainRootPresentationalProps) => {
   return (
     <>
@@ -149,6 +162,12 @@ export const MainRootPresentational = ({
               upDateId={upDateId}
               onClickUpdateDialog={onClickUpdateDialog}
               onCloseUpdateDialog={onCloseUpdateDialog}
+              handleDeleteMoneyFlow={handleDeleteMoneyFlow}
+              isDeleteDialogOpen={isDeleteDialogOpen}
+              onDeleteDialogOpenChange={onDeleteDialogOpenChange}
+              deleteId={deleteId}
+              onClickDeleteDialog={onClickDeleteDialog}
+              onCloseDeleteDialog={onCloseDeleteDialog}
             />
           </Box>
         </Show>
@@ -167,6 +186,12 @@ export const MainRootPresentational = ({
               upDateId={upDateId}
               onClickUpdateDialog={onClickUpdateDialog}
               onCloseUpdateDialog={onCloseUpdateDialog}
+              handleDeleteMoneyFlow={handleDeleteMoneyFlow}
+              isDeleteDialogOpen={isDeleteDialogOpen}
+              onDeleteDialogOpenChange={onDeleteDialogOpenChange}
+              deleteId={deleteId}
+              onClickDeleteDialog={onClickDeleteDialog}
+              onCloseDeleteDialog={onCloseDeleteDialog}
             />
           </Box>
         </Show>
