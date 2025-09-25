@@ -8,6 +8,7 @@ import * as moneyFlowsHandler from '@/features/Main/Root/hooks/handlers/useMoney
 import * as viewYearHandler from '@/features/Main/Root/hooks/handlers/useViewYearHandler'
 import * as CreateMoneyFlowDialogHandler from '@/features/Main/Root/hooks/handlers/useCreateMoneyFlowDialogHandler'
 import * as UpdateMoneyFlowDialogHandler from '@/features/Main/Root/hooks/handlers/useUpdateMoneyFlowDialogHandler'
+import * as DeleteMoneyFlowDialogHandler from '@/features/Main/Root/hooks/handlers/useDeleteMoneyFlowDialogHandler'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 
 // Mocking the ResultIdPresentational component
@@ -70,7 +71,7 @@ vi.spyOn(CreateMoneyFlowDialogHandler, 'useCreateMoneyFlowDialogHandler').mockRe
   onDialogOpenChange: mockOnDialogOpenChange,
 })
 
-// Mocking the.  useUpdateMoneyFlowDialogHandle hook
+// Mocking the useUpdateMoneyFlowDialogHandle hook
 const mockHandleUpdateMoneyFlow = vi.fn()
 const mockOnCheckedChangeForUpdate = vi.fn()
 const mockIsIncomeForUpdate = false
@@ -88,6 +89,22 @@ vi.spyOn(UpdateMoneyFlowDialogHandler, 'useUpdateMoneyFlowDialogHandler').mockRe
   upDateId: mockUpDateId,
   onClickUpdateDialog: mockOnClickUpdateDialog,
   onCloseUpdateDialog: mockOnCloseUpdateDialog,
+})
+
+// Mocking the useDeleteMoneyFlowDialogHandler hook
+const mockHandleDeleteMoneyFlow = vi.fn()
+const mockIsDeleteDialogOpen = false
+const mockOnDeleteDialogOpenChange = vi.fn()
+const mockDeleteId: number | null = 1
+const mockOnClickDeleteDialog = vi.fn()
+const mockOnCloseDeleteDialog = vi.fn()
+vi.spyOn(DeleteMoneyFlowDialogHandler, 'useDeleteMoneyFlowDialogHandler').mockReturnValue({
+  handleDeleteMoneyFlow: mockHandleDeleteMoneyFlow,
+  isDeleteDialogOpen: mockIsDeleteDialogOpen,
+  onDeleteDialogOpenChange: mockOnDeleteDialogOpenChange,
+  deleteId: mockDeleteId,
+  onClickDeleteDialog: mockOnClickDeleteDialog,
+  onCloseDeleteDialog: mockOnCloseDeleteDialog,
 })
 
 describe('MainRootContainer', () => {
@@ -122,6 +139,12 @@ describe('MainRootContainer', () => {
           upDateId: mockUpDateId,
           onClickUpdateDialog: mockOnClickUpdateDialog,
           onCloseUpdateDialog: mockOnCloseUpdateDialog,
+          handleDeleteMoneyFlow: mockHandleDeleteMoneyFlow,
+          isDeleteDialogOpen: mockIsDeleteDialogOpen,
+          onDeleteDialogOpenChange: mockOnDeleteDialogOpenChange,
+          deleteId: mockDeleteId,
+          onClickDeleteDialog: mockOnClickDeleteDialog,
+          onCloseDeleteDialog: mockOnCloseDeleteDialog,
         }),
       )
     })

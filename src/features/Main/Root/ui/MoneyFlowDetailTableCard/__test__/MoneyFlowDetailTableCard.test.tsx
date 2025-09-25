@@ -4,6 +4,7 @@ import { screen, within } from '@testing-library/react'
 import { customRender } from '@/tests/helpers/customRender'
 import { MoneyFlowDetailTableCard } from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/MoneyFlowDetailTableCard'
 import * as UpdateDialogCard from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/UpdateDialogCard/UpdateDialogCard'
+import * as DeleteDialogCard from '@/features/Main/Root/ui/MoneyFlowDetailTableCard/DeleteDialogCard/DeleteDialogCard'
 import { type moneyFlowData } from '@/features/Main/Root/types/moneyFlowData'
 import { type Kind } from '@/models/constants/kind'
 
@@ -39,6 +40,12 @@ const mockOnUpdateDialogOpenChange = vi.fn()
 const mockUpDateId = 1
 const mockOnClickUpdateDialog = vi.fn()
 const mockOnCloseUpdateDialog = vi.fn()
+const mockHandleDeleteMoneyFlow = vi.fn()
+const mockIsDeleteDialogOpen = false
+const mockOnDeleteDialogOpenChange = vi.fn()
+const mockDeleteId: number | null = 1
+const mockOnClickDeleteDialog = vi.fn()
+const mockOnCloseDeleteDialog = vi.fn()
 const defaultProps = {
   onSubmitTargetDate: mockOnSubmitTargetDate,
   items: mockData,
@@ -52,6 +59,12 @@ const defaultProps = {
   upDateId: mockUpDateId,
   onClickUpdateDialog: mockOnClickUpdateDialog,
   onCloseUpdateDialog: mockOnCloseUpdateDialog,
+  handleDeleteMoneyFlow: mockHandleDeleteMoneyFlow,
+  isDeleteDialogOpen: mockIsDeleteDialogOpen,
+  onDeleteDialogOpenChange: mockOnDeleteDialogOpenChange,
+  deleteId: mockDeleteId,
+  onClickDeleteDialog: mockOnClickDeleteDialog,
+  onCloseDeleteDialog: mockOnCloseDeleteDialog,
 }
 
 const mockOnceData: moneyFlowData[] = [
@@ -73,7 +86,12 @@ vi.spyOn(UpdateDialogCard, 'UpdateDialogCard').mockImplementation(() => {
   return <div data-testid='mock-updateDialogCard'>Mocked UpdateDialogCard</div>
 })
 
-describe('ExpensesTableCard', () => {
+// Mocking the DeleteDialogCard component
+vi.spyOn(DeleteDialogCard, 'DeleteDialogCard').mockImplementation(() => {
+  return <div data-testid='mock-deleteDialogCard'>Mocked DeleteDialogCard</div>
+})
+
+describe('MoneyFlowDetailTableCard', () => {
   describe('正常系', () => {
     it('テーブルヘッダー内容とデータが正しく表示される', () => {
       customRender(<MoneyFlowDetailTableCard {...defaultProps} />)
@@ -109,6 +127,12 @@ describe('ExpensesTableCard', () => {
       customRender(<MoneyFlowDetailTableCard {...onceDataProps} />)
 
       expect(screen.getByTestId('mock-updateDialogCard')).toBeInTheDocument()
+    })
+
+    it('適切なpropsでDeleteDialogCardコンポーネントが表示される', () => {
+      customRender(<MoneyFlowDetailTableCard {...onceDataProps} />)
+
+      expect(screen.getByTestId('mock-deleteDialogCard')).toBeInTheDocument()
     })
   })
 })

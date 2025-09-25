@@ -3,6 +3,7 @@ import { useMoneyFlowsHandler } from './hooks/handlers/useMoneyFlowsHandler'
 import { useViewYearHandler } from './hooks/handlers/useViewYearHandler'
 import { useCreateMoneyFlowDialogHandler } from './hooks/handlers/useCreateMoneyFlowDialogHandler'
 import { useUpdateMoneyFlowDialogHandler } from './hooks/handlers/useUpdateMoneyFlowDialogHandler'
+import { useDeleteMoneyFlowDialogHandler } from './hooks/handlers/useDeleteMoneyFlowDialogHandler'
 
 export const MainRootContainer = () => {
   const {
@@ -27,6 +28,14 @@ export const MainRootContainer = () => {
   } = useUpdateMoneyFlowDialogHandler()
   const { handleCreateMoneyFlow, onCheckedChange, isIncome, isDialogOpen, onDialogOpenChange } =
     useCreateMoneyFlowDialogHandler()
+  const {
+    handleDeleteMoneyFlow,
+    isDeleteDialogOpen,
+    onDeleteDialogOpenChange,
+    deleteId,
+    onClickDeleteDialog,
+    onCloseDeleteDialog,
+  } = useDeleteMoneyFlowDialogHandler()
 
   return (
     <MainRootPresentational
@@ -53,6 +62,12 @@ export const MainRootContainer = () => {
       upDateId={upDateId}
       onClickUpdateDialog={onClickUpdateDialog}
       onCloseUpdateDialog={onCloseUpdateDialog}
+      handleDeleteMoneyFlow={handleDeleteMoneyFlow}
+      isDeleteDialogOpen={isDeleteDialogOpen}
+      onDeleteDialogOpenChange={onDeleteDialogOpenChange}
+      deleteId={deleteId}
+      onClickDeleteDialog={onClickDeleteDialog}
+      onCloseDeleteDialog={onCloseDeleteDialog}
     />
   )
 }
