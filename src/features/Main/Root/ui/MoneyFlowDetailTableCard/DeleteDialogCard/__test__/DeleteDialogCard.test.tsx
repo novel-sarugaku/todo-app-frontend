@@ -64,7 +64,7 @@ beforeEach(() => {
   vi.clearAllMocks()
 })
 
-describe('UpdateDialogCard', () => {
+describe('DeleteDialogCard', () => {
   describe('正常系', () => {
     it('収支削除ダイアログ上に表示されるべきテキストが表示される', () => {
       customRender(<DeleteDialogCard {...openDialogProps} />)
